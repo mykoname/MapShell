@@ -1,0 +1,517 @@
+Include "mapbasic.def"
+Include "menu.def"
+Include "icons.def"
+Include "globals1.def"
+
+Declare Sub Put_names_and_first_numbers 'процедура инициализации имен таблиц и начальных значений переменных
+
+Declare Sub preparing_data ' подпрограмма чтения данных для диалогов из таблиц
+
+
+  '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+'процедура инициализации имен таблиц и начальных значений переменных
+sub Put_names_and_first_numbers
+' ----------- назначение имен таблиц ------------
+
+'!!!!!!!!!!!!!ВАЖНО !!! ПОПРОБОВАТЬ !!!!!!!!!
+'возможно, переменные вместо живых имен, которые сейчас поставлены, не подставлялись, поскольку 
+' процедура назначения имен переменных запускалась после этой процедуры
+' желаемый порядок для самонстраиваемой версии таков:
+' 1.процедура чтения из файла переменных-имен для таблиц 
+' (по отношению к другим картам должны быть соглашения типа 
+'  "в картах должны быть города, станции, районы и т.д.)
+' 2.назначение их в данной процедуре (полученных из файла --> этим)
+' 3.только потом из файла чиатются данные о столбцах для подготовки поиска и т.п.
+' !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ prob1_tab_name = "Область111"
+ prob2_tab_name = "Райони"
+
+ obl1_table = prob1_tab_name
+ obl2_table = "Область2"
+ Leg1_table = "Службова_легенда"
+
+ rajon_table = prob2_tab_name
+ polit_cordon_table = "Кордони"
+ good_avtoshl_table = "Удосконалені_автодороги"
+ avtoshl_table = "Автодороги"
+ earth_r_table = "Грунтові_дороги"
+ zal_dor_table = "Залізниці"
+ zal_sets_table = "Залізничні_станції"
+' selo_table = "Села"
+' town_table = "Міста"
+ most_table = "Мости"
+ np_table = "населені_пункти"
+ gidr_table = "Гідрографія"
+ rastit_table = "Рослинність"
+ reljef_table = "Рельєф"
+ inshi_table = "Інші"
+ selection_table = "Вибір_нп"
+ R_selection_table = "Вибір_району"
+      'spec_selection_table = "Спецвибір"
+
+'########пока убрал все спец переменные:№№№№№№№№№№№№
+' structur_table = "ОВС"  '"Структура"
+' perechvat_table = "Перехоплення"
+' sirena_table = "Сирена"
+       'umvs4_table = ""
+       'umvs5_table = ""
+' struct_tr_table = "ОВСТ"
+' cordon1_table = "ПВ"
+' cordon2_table = "ПВПП"
+' cordon_zona_table = "Прикордонна_зона"
+' tamog_table = "Митниці"
+
+' назначение имен столбцов - носителей имени для label`s
+ polit_cordon_label = "Найменування"
+ rajon_label = "Власна_назва"
+ most_label = "Найменування"
+ good_avtoshl_label = "Номер_дороги"
+ avtoshl_label = "Номер_дороги"
+ earth_r_label = "Найменування"
+ zal_dor_label = "Власна_назва"
+ zal_sets_label = "Власна_назва"
+                     ' selo_label = "Назва_укр"
+                     ' town_label = "Назва_укр"
+
+ np_label = "Власна_назва"
+ gidr_label = "Власна_назва"
+ rastit_label = "Найменування"
+ reljef_label = "Найменування"
+ inshi_label = "Найменування"
+            selection_label = "Власна_назва"
+            R_selection_label = "Власна_назва"
+       ' spec_selection_label = "Назва"
+'########пока убрал все спец переменные:№№№№№№№№№№№№
+' structur_label = "Установа"
+' structur_label2 = "Адреса"
+' structur_label3 = "Телефон"
+' perechvat_label = "Номер"
+' perechvat_label2 = "Розміщення_поста"
+' sirena_rlabel = "Район"
+' sirena_label = "Розміщення_заслону"
+' umvs4_label = ""
+' umvs5_label = ""
+' struct_tr_label1 = "Установа"
+' struct_tr_label2 = "Адреса"
+' struct_tr_label3 = "Телефон"
+' cordon1_label1 = "Установа"
+' cordon1_label2 = "Місцезнаходження"
+' cordon2_label1 = "Назва_пункту"
+' cordon2_label2 = "Категорія"
+' cordon2_label3 = "Вид"
+' cordon_zona_label = "Найменування"
+' tamog_label = "Установа"
+
+'---------------------------------------------------------------------------------
+'назначение имен временных таблиц для подготовки сокращенного и исправленного инфо
+rajon_info_table = "Райони_інфо"
+ good_avtoshl_info_table = "Удосконалені_автодороги_інфо"
+ avtoshl_info_table = "Автодороги_інфо"
+ earth_r_info_table = "Грунтові_дороги_інфо"
+ zal_dor_info_table = "Залізниці_інфо"
+ zal_sets_info_table = "Залізничні_станції_інфо"
+ most_info_table = "Мости_інфо"
+ np_info_table = "населені_пункти_інфо"
+ gidr_info_table = "Гідрографія_інфо"
+ rastit_info_table = "Рослинність_інфо"
+ reljef_info_table = "Рельєф_інфо"
+ inshi_info_table = "Інші_інфо"
+' structur_info_table = "ОВС_інфо"  '"Структура"
+' perechvat_info_table = "Перехоплення_інфо"
+' sirena_info_table = "Сирена_інфо"
+' struct_tr_info_table = "ОВСТ_інфо"
+' cordon1_info_table = "ПВ_інфо"
+' cordon2_info_table = "ПВПП_інфо"
+
+
+
+
+
+' simple_font = MakeFont("Times New Roman Cyr",0,10,BLACK,-1)
+  simple_font = MakeFont("Arial Cyr",0,8,BLACK,-1)
+ raj_font = MakeFont("Times New Roman Cyr",513,12,BLACK,-1)
+ font_of_selection = MakeFont("Arial Cyr",513,14,8388608,yellow) '3,14,MAGENTA,yellow)
+'предпоследний вариант: font_of_selection = MakeFont("Times New Roman Cyr",3,14,MAGENTA,WHITE)
+' font_of_selection = MakeFont("Times New Roman Cyr",1,12,13126965,-1)
+'font_of_selection остался только при выводе насел пункта 
+'варианты цветов к brush:(2,Green,Yellow) ..13126965..  ..13122397..  ..13107808..  ..13107323..    
+ brush_of_selection = MakeBrush(2,MAGENTA,-1)
+' brush_of_selection = MakeBrush(2,13126965,-1)           
+ line_of_selection = MakePen(2,2,Blue)
+ raj_sel_brush = MakeBrush(2,16777168,16777215)
+zal_dor_font = MakeFont("Arial Cyr",513,12,BLUE,YELLOW)
+
+'убрал цвета надписей спец.объектов:
+'umvs_font = MakeFont("Arial Cyr",3,12,RED,YELLOW)
+'Posts_font = MakeFont("Arial Cyr",3,12,RED,YELLOW)
+'cordon_font = MakeFont("Arial Cyr",3,12,32768,yellow)   'Green,YELLOW)
+'zal_umvs_font = MakeFont("Arial Cyr",3,12,BLUE,YELLOW)
+'sirena_font = MakeFont("Arial Cyr",3,12,16711935,YELLOW)  '?????
+
+ last_r_select = 1
+ last_obl_t = 1
+ last_odes_r = 1
+ last_way_of_np_selection = 1
+ last_np_select = ""
+ last_np_select_num = 1
+ last_zal_set = 1
+
+' убрал спец. переменные
+' Last_structur_sel= 1
+' last_perechvat_sel= 1
+' Last_sirena_sel = 1
+
+'к показу легенды
+ show_legend = 0
+
+'к флажкам нагрузки (чтоб соответствовали карте)
+  init_raj_gran  = 1
+  init_show_np   = 1
+  init_show_dor1 = 1
+  init_show_dor2 = 1
+  init_show_dor3 = 1
+  init_show_dor4 = 1
+  init_show_most = 1
+  init_show_rastit = 1
+  init_show_gidr =   1
+  init_show_reljef = 0
+  init_show_inshi = 0
+
+' убрал спец. переменные:
+'  init_structur =   0
+'  init_perechvat =  0
+'  init_sirena =     0
+  
+'  init_sumign1 = 0
+'  init_sumign2 = 0 
+'  init_sumign3 = 0
+'  init_sumign4 = 0
+'  init_mitn    = 0
+
+
+'присвоение начальных значений к поиску насел пунктов по районам:
+dim schet1 as smallint
+schet1 = 0
+do
+ schet1 = schet1 + 1
+ last_npr_selNum(schet1) = 1
+loop while schet1 <> 26
+
+' убрал спец. переменные:
+' Last_struct_tr_sel = 1
+' last_cordon1_sel = 1
+' Last_cordon2_sel = 1
+
+'--- назначение значений логическм переменным к кнопкам нагрузки ---
+'button_show_r = 1   
+'button_show_np = 1
+'button_show_avtostr = 1
+'button_show_dor2 = 1
+'button_show_dor3 = 1
+'button_show_gidr = 1
+'button_Show_structure = 1
+'button_show_perechvat = 1 
+'button_show_sloj3 = 1
+'button_show_sloj4 = 1
+'button_show_sloj5 = 1
+'button_show_smegn_sloj1 = 1
+'button_show_smegn_sloj2 = 1
+'r_button = 101
+
+end sub
+'------------------ конец процедуры назначения начальных значений --------------------
+
+
+
+' подпрограмма чтения данных для диалогов из таблиц
+Sub preparing_data
+'-----присвоение значений массивам имен и полигонов районов (читаю их из таблицы соотв. слоя)   
+Fetch First From Райони
+Dim counter1, count5 as smallint
+ counter1 = 0
+ count5 = 0
+ Do  
+  counter1 = counter1 + 1
+  r_id(counter1) = Райони.ID_ОГМІ 
+  r_name(counter1) = Райони.Власна_назва
+  r_obj(counter1) = Райони.obj
+  r_p(counter1) = Райони.ID_міста
+'след строки к поиску нп по районам
+  if r_id(counter1) <= num_of_rajones then
+   count5 = count5 + 1
+   only_rajones_id(count5) = r_id(counter1)
+  end if
+  Fetch Next From Райони
+ Loop Until EOT(Райони)
+ReDim r_id(counter1)
+ReDim r_name(counter1)
+ReDim r_obj(counter1)
+ReDim r_p(counter1)
+end_i = UBound(r_name) 'сделать это глобальным
+
+'-----------присвоение значений массиву названий насел пунктов --------------
+'           и заодно подготовка диалога поиска населенных пунктов
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'  при подготовке строки для списка населенных пунктов вероятно превышаю предел 
+'  длины строки. возможно в версии 4,5 можно все-таки обходиться 
+'  фразой Title From Variable np_name (и без np_names)
+'Fetch First From selo_table
+'selo_count --- global var
+'    selo_count = 0
+' убрал считывание имен сел на время отладки:
+' Do  
+'  selo_count = selo_count + 1
+'  np_name(selo_count) = Села.название
+'  Fetch Next From selo_table
+' Loop Until EOT(Selo_table)
+
+
+np_names = ""
+
+'обнуление переменных для поиска насел пунктов по районам
+dim schet as smallint
+schet = 0
+do 
+ schet = schet + 1
+ npr_names(schet) =""
+ npr_num(schet) = 0
+Loop While schet <> 26
+
+Fetch First From np_table
+' counter3 --- global var
+ counter3 = 0   'selo_count
+ Do  
+  counter3 = counter3 + 1
+  np_name(counter3) = населені_пункти.Власна_назва
+  np_names = np_names + Rtrim$(np_name(counter3))+ ";"
+'!!! отсюда и до fetch next идет вставка, создающая все для поиска городов по районам
+  npr_id(counter3) = населені_пункти.ID_ОГМІ
+  Do Case npr_id(counter3)
+   Case 1
+    npr_num(1) = npr_num(1) + 1
+    npr1_row(npr_num(1)) = counter3
+    npr_names(1) = npr_names(1) + Rtrim$(np_name(counter3))+ ";"
+   Case 2
+    npr_num(2) = npr_num(2) + 1
+    npr2_row(npr_num(2)) = counter3
+    npr_names(2) = npr_names(2) + Rtrim$(np_name(counter3))+ ";"
+   Case 3
+    npr_num(3) = npr_num(3) + 1
+    npr3_row(npr_num(3)) = counter3
+    npr_names(3) = npr_names(3) + Rtrim$(np_name(counter3))+ ";"
+   Case 4
+    npr_num(4) = npr_num(4) + 1
+    npr4_row(npr_num(4)) = counter3
+    npr_names(4) = npr_names(4) + Rtrim$(np_name(counter3))+ ";"
+   Case 5
+    npr_num(5) = npr_num(5) + 1
+    npr5_row(npr_num(5)) = counter3
+    npr_names(5) = npr_names(5) + Rtrim$(np_name(counter3))+ ";"
+   Case 6
+    npr_num(6) = npr_num(6) + 1
+    npr6_row(npr_num(6)) = counter3
+    npr_names(6) = npr_names(6) + Rtrim$(np_name(counter3))+ ";"
+   Case 7
+    npr_num(7) = npr_num(7) + 1
+    npr7_row(npr_num(7)) = counter3
+    npr_names(7) = npr_names(7) + Rtrim$(np_name(counter3))+ ";"
+   Case 8
+    npr_num(8) = npr_num(8) + 1
+    npr8_row(npr_num(8)) = counter3
+    npr_names(8) = npr_names(8) + Rtrim$(np_name(counter3))+ ";"
+   Case 9
+    npr_num(9) = npr_num(9) + 1
+    npr9_row(npr_num(9)) = counter3
+    npr_names(9) = npr_names(9) + Rtrim$(np_name(counter3))+ ";"
+   Case 10
+    npr_num(10) = npr_num(10) + 1
+    npr10_row(npr_num(10)) = counter3
+    npr_names(10) = npr_names(10) + Rtrim$(np_name(counter3))+ ";"
+   Case 11
+    npr_num(11) = npr_num(11) + 1
+    npr11_row(npr_num(11)) = counter3
+    npr_names(11) = npr_names(11) + Rtrim$(np_name(counter3))+ ";"
+   Case 12
+    npr_num(12) = npr_num(12) + 1
+    npr12_row(npr_num(12)) = counter3
+    npr_names(12) = npr_names(12) + Rtrim$(np_name(counter3))+ ";"
+   Case 13
+    npr_num(13) = npr_num(13) + 1
+    npr13_row(npr_num(13)) = counter3
+    npr_names(13) = npr_names(13) + Rtrim$(np_name(counter3))+ ";"
+   Case 14
+    npr_num(14) = npr_num(14) + 1
+    npr14_row(npr_num(14)) = counter3
+    npr_names(14) = npr_names(14) + Rtrim$(np_name(counter3))+ ";"
+   Case 15
+    npr_num(15) = npr_num(15) + 1
+    npr15_row(npr_num(15)) = counter3
+    npr_names(15) = npr_names(15) + Rtrim$(np_name(counter3))+ ";"
+   Case 16
+    npr_num(16) = npr_num(16) + 1
+    npr16_row(npr_num(16)) = counter3
+    npr_names(16) = npr_names(16) + Rtrim$(np_name(counter3))+ ";"
+   Case 17
+    npr_num(17) = npr_num(17) + 1
+    npr17_row(npr_num(17)) = counter3
+    npr_names(17) = npr_names(17) + Rtrim$(np_name(counter3))+ ";"
+   Case 18
+    npr_num(18) = npr_num(18) + 1
+    npr18_row(npr_num(18)) = counter3
+    npr_names(18) = npr_names(18) + Rtrim$(np_name(counter3))+ ";"
+   Case 19
+    npr_num(19) = npr_num(19) + 1
+    npr19_row(npr_num(19)) = counter3
+    npr_names(19) = npr_names(19) + Rtrim$(np_name(counter3))+ ";"
+   Case 20
+    npr_num(20) = npr_num(20) + 1
+    npr20_row(npr_num(20)) = counter3
+    npr_names(20) = npr_names(20) + Rtrim$(np_name(counter3))+ ";"
+   Case 21
+    npr_num(21) = npr_num(21) + 1
+    npr21_row(npr_num(21)) = counter3
+    npr_names(21) = npr_names(21) + Rtrim$(np_name(counter3))+ ";"
+   Case 22
+    npr_num(22) = npr_num(22) + 1
+    npr22_row(npr_num(22)) = counter3
+    npr_names(22) = npr_names(22) + Rtrim$(np_name(counter3))+ ";"
+   Case 23
+    npr_num(23) = npr_num(23) + 1
+    npr23_row(npr_num(23)) = counter3
+    npr_names(23) = npr_names(23) + Rtrim$(np_name(counter3))+ ";"
+   Case 24
+    npr_num(24) = npr_num(24) + 1
+    npr24_row(npr_num(24)) = counter3
+    npr_names(24) = npr_names(24) + Rtrim$(np_name(counter3))+ ";"
+   Case 25
+    npr_num(25) = npr_num(25) + 1
+    npr25_row(npr_num(25)) = counter3
+    npr_names(25) = npr_names(25) + Rtrim$(np_name(counter3))+ ";"
+   Case 26
+    npr_num(26) = npr_num(26) + 1
+    npr26_row(npr_num(26)) = counter3
+    npr_names(26) = npr_names(26) + Rtrim$(np_name(counter3))+ ";"
+  ' Case Else     
+  End Case
+
+  Fetch Next From np_table
+ Loop Until EOT(np_table)
+ReDim np_name(counter3)
+ReDim npr_id(counter3)
+ReDim npr1_row(npr_num(1))
+ReDim npr2_row(npr_num(2))
+ReDim npr3_row(npr_num(3))
+ReDim npr4_row(npr_num(4))
+ReDim npr5_row(npr_num(5))
+ReDim npr6_row(npr_num(6))
+ReDim npr7_row(npr_num(7))
+ReDim npr8_row(npr_num(8))
+ReDim npr9_row(npr_num(9))
+ReDim npr10_row(npr_num(10))
+ReDim npr11_row(npr_num(11))
+ReDim npr12_row(npr_num(12))
+ReDim npr13_row(npr_num(13))
+ReDim npr14_row(npr_num(14))
+ReDim npr15_row(npr_num(15))
+ReDim npr16_row(npr_num(16))
+ReDim npr17_row(npr_num(17))
+ReDim npr18_row(npr_num(18))
+ReDim npr19_row(npr_num(19))
+ReDim npr20_row(npr_num(20))
+ReDim npr21_row(npr_num(21))
+ReDim npr22_row(npr_num(22))
+ReDim npr23_row(npr_num(23))
+ReDim npr24_row(npr_num(24))
+ReDim npr25_row(npr_num(25))
+ReDim npr26_row(npr_num(26))
+
+          'подготовка диалога поиска района в расчете на id района
+'r_names = ""
+'obl_town_names = ""
+'i = 0
+'i2 = 0
+'i3 = 0
+'    Do  
+'     i = i + 1  
+'     if r_id(i) <= num_of_rajones Then
+'       i2 = i2 + 1
+'       only_rajones(i2) = r_name(i)
+'       r_names = r_names + only_rajones(i2) + ";"  'r_name(i) заменил на only_rajones(i2)
+'     else
+'      i3 = i3 + 1
+'      obl_t_name(i3) = r_name(i)
+'      obl_town_names = obl_town_names + obl_t_name(i3) + ";"
+'    end if  
+'    Loop While i <> end_i
+'obl_towns_num = i3
+'ReDim obl_t_name(obl_towns_num)
+
+           'подготовка диалога поиска района в расчете на поле "п"
+           'пока использую этот вариант
+r_names = ""
+obl_town_names = ""
+i = 0
+i2 = 0
+i3 = 0
+    Do  
+     i = i + 1  
+' след строка создает массив кратких имен районов без слова "район"
+     short_r_name(i) = RTrim$(Left$(r_name(i),InStr(1,r_name(i),"район")-1))
+     if r_p(i) = 0 Then
+       i2 = i2 + 1
+'       only_rajones(i2) = r_name(i)
+'предыдущую строку поменял на такую после добавления слова "район" в столбец таблицы:
+       only_rajones(i2) = RTrim$(Left$(r_name(i),InStr(1,r_name(i),"район")-1))
+       r_names = r_names + only_rajones(i2) + ";"  'r_name(i) заменил на only_rajones(i2)
+     else
+      i3 = i3 + 1
+      obl_t_name(i3) = r_name(i)
+      obl_town_names = obl_town_names + obl_t_name(i3) + ";"
+    end if  
+    Loop While i <> end_i
+obl_towns_num = i3
+ReDim obl_t_name(obl_towns_num)
+ReDim short_r_name(end_i)
+'Note str$(i2)
+'Stop
+
+' к районам Одессы:
+odessa_r(1) = "Київський"
+odessa_r(2) = "Іллічівський"
+odessa_r(3) = "Суворовський"
+odessa_r(4) = "Центральний"
+odessa_r(5) = "Жовтневий"
+odessa_r(6) = "Приморський"
+odessa_r(7) = "Ленинський"
+odessa_r(8) = "Малиновський"
+
+dim h as smallint
+odessa_r_names = ""
+h = 0
+do 
+ h = h + 1
+ odessa_r_names = odessa_r_names + odessa_r(h)+";"
+loop while h <> num_of_odessa_rajones
+
+'----------- подготовка диалога поиска ж/д станций по именам -------------
+zal_sets_names = ""
+Dim sets_count as smallint
+Fetch first from zal_sets_table
+sets_count = 0
+ Do 
+  sets_count = sets_count + 1
+  zal_sets_name(sets_count) = Залізничні_станції.Власна_назва
+  zal_sets_names = zal_sets_names + RTrim$(zal_sets_name(sets_count))+";" 
+  Fetch Next from zal_sets_table
+ Loop Until EOT(zal_sets_table)
+ReDim zal_sets_name(sets_count)
+
+'убрал следующие спец. блоки, которые можно взять в файле begin2.mb в милиц. варианте:
+'---------- подготовка диалога поиска структурных подразделений ------------
+'---------- подготовка диалога поиска постов "Перехват" -------------------
+'------ подготовка диалога поиска структуры милиции на транспорте ----------
+'------ подготовка диалога поиска пограничных подразделений ----------
+'------ подготовка диалога поиска пограничных пропускных пунктов ----------
+'---------- подготовка диалога поиска постов "Сирена" -------------------
+
+end Sub 

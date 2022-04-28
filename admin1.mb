@@ -1,0 +1,1168 @@
+Include "mapbasic.def"
+Include "menu.def"
+Include "icons.def"
+                ' Include "helpauth.mb"
+Include "globals1.def"
+
+
+Declare Sub first_auth
+Declare Sub EndHandler
+
+Declare Sub Main
+Declare Sub Initial
+Declare sub Put_maps_first
+Declare Sub Put_maps
+Declare sub Put_names_and_first_numbers
+Declare Sub Begin1
+Declare Sub preparing_data
+Declare Sub Buttons_out
+Declare Sub Destroy_old_buttons
+Declare Sub scale_plus
+Declare Sub scale_minus
+
+Declare Sub legenda
+Declare Sub show_hide_legend
+Declare Sub Password
+
+ Declare Sub Goodbye
+
+ Declare Sub rajon
+
+ Declare Sub mapping_of_Layers
+
+ Declare Sub rajoni
+ Declare Sub obltown
+ Declare Sub Selo_town
+ Declare Sub r_station
+ Declare Sub Umvs
+ Declare Sub Post
+ Declare Sub Sirena
+ Declare Sub Umvs_tr
+ Declare Sub Cordon
+ Declare Sub Cordon_punkt
+
+ Declare Sub Scale
+ Declare Sub Nagruzka
+ Declare Sub buttons_panel
+ Declare Sub SOS1
+ Declare Sub SOS2
+Declare Sub WinClosedHandler
+
+  Declare Sub Help1
+  Declare Sub Help_authors
+  Declare Sub Help_authors_adm
+ Declare Sub show_1_layer(show_yes as logical, table_name as string, 
+                          column_of_label as alias, show_font as font)
+'----- процедура к кнопкам ----------
+' Declare Sub show_1b_layer (show_yes, button_show_ind as logical, button_id as smallint, 
+'                   table_name as string, column_of_label as alias, show_font as font)
+ Declare Sub show_1_layer_label_off(show_yes as logical, table_name as string, 
+                            column_of_label as alias)
+
+ Declare Sub show_1_layer_without_label(show_yes as logical, table_name as string)
+
+
+ Declare Sub disable_sumigni
+Declare Sub selo_town_r
+Declare Sub parallel_nplist
+Declare Sub selo_town_all
+Declare sub parallel_listbox
+Declare sub parallel_edittext
+Declare Sub Delete_select
+Declare sub deletE_first_layers
+
+Declare Sub sinchro_odessa
+Declare Sub init_odes_rajones
+
+Declare Sub Custom_scale
+Declare Sub hide_custom 
+'-------------процедуры к кнопкам ------------
+'Declare Sub nagruzka_button
+'Declare Sub show_hide_layer(button_id as smallint, show_indicat as logical, 
+'                            layer_name as string, label_name as alias)
+
+Declare Sub adm_nastr1
+Declare Sub setting_of_tables1
+Declare Sub dop_tables_opening
+Declare Sub adm_browse
+Declare Sub adm_print
+Declare Sub adm_passwords
+Declare Sub OK_passw
+Declare Sub adm_info
+
+
+ Declare Sub sorting_rows  'к прогр. системного администратора
+
+ Declare Sub sprav_rajon       
+Declare Sub Cancel_sub  'переход в режим ожидания
+
+Declare Sub info_dial_25_40
+
+Declare Sub info_dial_1
+Declare Sub info_dial_2
+Declare Sub info_dial_3
+Declare Sub info_dial_4
+Declare Sub info_dial_5
+Declare Sub info_dial_6
+Declare Sub info_dial_7
+Declare Sub info_dial_8
+Declare Sub info_dial_9
+Declare Sub info_dial_10
+Declare Sub info_dial_11
+Declare Sub info_dial_12
+Declare Sub info_dial_13
+Declare Sub info_dial_14
+Declare Sub info_dial_15
+Declare Sub info_dial_16
+Declare Sub info_dial_17
+Declare Sub info_dial_18
+Declare Sub info_dial_19
+Declare Sub info_dial_20
+Declare Sub info_dial_21
+Declare Sub info_dial_22
+Declare Sub info_dial_23
+Declare Sub info_dial_24
+Declare Sub info_dial_25
+
+Declare Sub read_data_for_info
+Declare Sub prepare_info_tabs
+
+Declare Sub admin_obnulenie
+Declare Sub writing_info_data
+Declare Sub first_info_dial
+Declare Sub Info_data2(tabs_dat(max_num_of_columns) as info_data)
+Declare Sub Info_box_data2(tabs_dat(max_num_of_columns) as info_data)
+Declare sub not_end(ta_name as string)
+
+'********************** основная программа ******************************
+Sub Main
+'------------- setting of path to the maps and program files ----------------
+'!!!!! may be past it`l be best to make special query and saving in ini-file !!!!!
+'!!! возможно вместо пременных пути поставить функции пути к программе и  мапинфо и 
+'возможно добавить им  подкаталог, который будет создавться при инсталляции !!!!!!!!!!!!!!!!!
+prog_dir = ProgramDirectory$()+"mapshell\" 
+map_dir = ProgramDirectory$()+"mapshell\maps\" 
+  'map_path = map_dir + "init_obl.wor"
+
+
+'!!!!!!!!!!! снова убрал две следующие строки на время отладки !!!!!!!!!!!!!!!
+'call password
+'call begin1 'проверка на наличие открытых файлов в мапинфо: если они есть закрываю без сохранения
+
+' в эту процедуру перенес назначение имен таблиц и присвоение начальных значений переменным:
+call  Put_names_and_first_numbers
+
+ ' *****************************************************
+' !!!!!!!!!! mtb Вывод заставки и во время заставки дожны загрузиться все данные !!!!!!!!!!!
+ ' *****************************************************
+
+
+
+'в 45-й мапинфо это не нужно:
+'потом поставить в диалог настройки запрос о сохранении основного 
+'меню Мапинфо и по его результатам убирать или оставлять это меню
+'Menu Bar Hide   'убираю меню Мапинфо
+
+'пока паллиатив по поводу матюков в StatusBar 
+'(убрать эту строку после решения вопросов с русской версией) :
+ StatusBar Hide
+
+ '!!!!!!!!!!!!!!!  убрать еще почти все кнопки !!!!!!!!!!!!!!!!!!!!!!!
+Call Buttons_out 'удаление лишних кнопок в панелях инструментов
+
+'--- вывод начального workspase`a ---
+'!!!!!!!!!!!на время отладки убрал следующую строку: !!!!!!!!!!!!
+'добавить проверку на открытость таблиц в мапинфо и если они там есть --- их закрытие 
+'эта проверка делается в begin1 и выдатся запрос на закрытие без сохранения
+
+
+
+ Call Initial  '<-- !!!!!!!!!!здесь только открываю таблицы!!!!!!!!!!!!!!!!!!!!!!
+        'след строка нужна на время отладки и должна быть 
+        'противоположна по комментированности
+ 'main_win_id = FrontWindow()  
+'Note str$(main_win_id)
+
+
+ Create Menu "Вихід з АРМу" As 
+  "&Вихід... /W@x" HelpMsg "Закінчення роботи програми" calling Goodbye 
+ Create Menu "Пошук" As
+  "&Району.../W@r" HelpMsg "Пошук району" calling Rajon,
+  "(&Суміжних районів/W@s" HelpMsg "Вивід суміжних районів" calling Rajoni,
+  "&Міста обласного підпорядкування..." HelpMsg "Пошук міста обласного підпорядкування" 
+    calling Obltown,
+  "&Населеного пункту..." HelpMsg "Пошук населенного пункту" calling Selo_town,
+  "&Залізничної станції..." HelpMsg "Пошук залізничної станції" calling r_station
+
+ Create Menu "Вид" As
+  "&Мірило..." HelpMsg "Вибір мірила зображення..." calling Scale,
+  "(-",
+  "&Навантаження..." HelpMsg "Вибір навантаження до мапи" calling Nagruzka,
+  "(-",
+  "Повернення панелі &функцій" HelpMsg "Повернення кнопкової панелі функцій" 
+   calling buttons_panel,
+  "&Початкове зображення" HelpMsg "Повернути зображення до початкової форми" calling SOS2
+ Create Menu "Допомога" As 
+  "&Довідка щодо роботи програми" HelpMsg "Вивід довідкової інформації про програму" 
+   calling Help1,
+  "&Про програму..." HelpMsg "Інформація про програму" 
+   calling Help_authors 
+
+Create Menu "Область" As 
+  "Пошук" AS "Пошук", 
+  "Вид" AS "Вид", 
+  "Допомога" As "Допомога",
+  "Вихід з програми" AS "Вихід з АРМу"
+
+Create Menu "Адмін_сервіс" As
+  "Настройка середовища..." calling adm_nastr1, 
+  "Вибір таблиць..." calling setting_of_tables1,
+  "Ведення баз даних..." calling adm_browse,
+  "Розпечатування..." calling adm_print,
+  "Паролі..." calling adm_passwords,
+'в следующей строке содержится вызов диалога подготовки списка полей для сокращенного инфо
+'   "Призначення полів для Інфо..." calling adm_info,
+  "Про програму..." calling Help_authors_adm,
+  "Вихід з програми-оболонки..." HelpMsg "Завершення робти із програмою-оболнкою" 
+   calling goodbye
+
+ Alter Menu Bar Add 
+  "Адмін_сервіс", "Область" 
+
+
+'*** создание кнопок отображения нагрузки --- начало, остальное отложили до следующей версии 
+'видимо, сами кнопки необходимо создать в VisualBasic`e
+'операторы вжатия-отжима кнопок включены в процедуры вывода нагрузки после поиска района
+'(процедура show_1b_layer)
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!:
+'для нормальной работы кнопок возможно, необходимо их создание поставить до вызова загрузки таблиц и рисования 
+'слоев и сделать кнопки не вжатыми, а при рисовании слоев необходимо вжимать кнопки --- 
+' --- это на случай если кнопки совсем не захотят корректно меняться с меню вместе 
+'********* !!!!!!!!! на этом этапе все кнопки убираю: !!!!!!!!!!!!!! ********* 
+' Create ButtonPad "Навантаження" As 
+'  ToggleButton
+'   HelpMsg "Накреслення/ненакреслення меж районів\nрайони"
+'   Calling nagruzka_button
+'   Icon MI_ICON_DISTRICT_MANY
+'   ID 101
+'   Check
+'  ToggleButton
+'   HelpMsg "Накреслення/ненакреслення населенних пунктів\nнаселені пункти"
+'   Calling nagruzka_button
+'   Icon MI_ICON_REALESTATE_6
+'   ID 102
+'   Check
+'
+' Title "Навантаження"
+
+' !!!!!!!!!! здесь рисую карту !!!!!!!!!!
+   call put_maps_first
+   Call Put_maps 
+
+     '   call first_auth
+   
+
+   call preparing_data
+'подготовка легенды
+   call legenda 
+
+' убрал следующую строку чтобы убрать подготовку и использование сокращенных таблиц
+' для вывода в инфо-окнах:
+' call read_data_for_info
+ 
+ call admin_obnulenie
+  
+'легкая проверка на "одесскость" используемых таблиц:
+' убрал это:
+'    if InStr(1,np_names,"Одеса") = 0 then 
+'      Note "Дані у таблицях були некоректно змінені, зверниться до розробників !"
+'      End Program
+'    End If
+'    if InStr(1,np_names,"Котовськ") = 0 then 
+'      Note "Дані у таблицях були некоректно змінені, зверниться до розробників !"
+'      End Program
+'    End If
+
+
+Alter Button ID 10001  Check
+Run Menu Command ID 10001
+
+'Close Window Message 
+
+Set Window Info
+  Font simple_font
+  Title "Інформація"
+ Position (0,10.5) Units "cm"
+ Width 6 Units "cm" Height 4 Units "cm"
+ 'Front
+ Default Access
+
+Set window Ruler
+ Title "Дистанція"
+
+End Sub   
+'************************ конец основной программы *****************************
+
+
+  '*****************************************************************************
+ Sub Goodbye
+dim otvet as logical
+     'mtb !!!! dialog about exit
+     'два пункта меню возможно потом поставить: выход вообще или закрытие таблиц
+Dialog 
+ Title "              Завершення роботи АРМу адміністратора баз даних"
+ Width 290
+ Control StaticText
+  Position 60,5
+  Title "На цьому роботу із програмою буде завершено !"
+ Control StaticText
+
+
+  Position 60,17
+  Title "Ви дійсно бажаєте завершити роботу програми ?"
+ Control OKButton
+  Position 80,34
+  Title "Так"
+ Control CancelButton
+  Position 130,34
+  Title "Ні, треба повернутися"
+ If CommandInfo(CMD_INFO_DLG_OK) Then
+   'проверка на соответствие кол-ва столбцов в таблицах тому, что записано в ини в последний раз
+ 
+ '!!!! пока убрал проверку соответствия таблицам на время отладки 
+ ' + надо поменять процедуру <not_end>
+
+'    if  rajon_columns_num <> TableInfo(rajon_table,TAB_INFO_NCOLS) then 
+'      call not_end(rajon_table)
+'    end if
+'    if np_columns_num <> TableInfo(np_table,TAB_INFO_NCOLS) Then
+'      call not_end(np_table)
+'    end if
+'    if zal_set_columns_num <> TableInfo(zal_sets_table,TAB_INFO_NCOLS) Then
+'      call not_end(zal_sets_table)
+'    end if
+
+' убрал спец. слои************************************:
+'    if perechvat_columns_num <> TableInfo(perechvat_table,TAB_INFO_NCOLS) Then
+'      call not_end(perechvat_table)
+'    end if
+'    if sirena_columns_num <> TableInfo(sirena_table,TAB_INFO_NCOLS) Then
+'      call not_end(sirena_table)
+'    end if
+'    if ovs_columns_num <> TableInfo(structur_table,TAB_INFO_NCOLS) Then
+'      call not_end(structur_table)
+'    end if
+'    if ovst_columns_num <> TableInfo(struct_tr_table,TAB_INFO_NCOLS) Then
+'      call not_end(struct_tr_table)
+'    end if
+'    if pv_columns_num <> TableInfo(cordon1_table,TAB_INFO_NCOLS) Then
+'      call not_end(cordon1_table)
+'    end if
+'    if pvpp_columns_num <> TableInfo(cordon2_table,TAB_INFO_NCOLS) Then
+'      call not_end(cordon2_table)
+'    end if
+   
+     '!!!!!!!закрывать все таблицы при выходе !!!!!!!!!!
+             'Close All 
+  Create Menu Bar As Default 
+  Create ButtonPads As Default
+  Set Handler WinClosedHandler Off
+  Close All
+  End Program
+  
+ else 
+  Exit Sub
+ end if 
+ End Sub
+
+Sub not_end(ta_name as string)
+ 
+dim vozvrat as logical, 
+ schet10 as smallint
+
+ vozvrat = Ask("Кількість стовбців у певних таблицях не відповідає кількості посилань на них в oko.ini  -- для коректної роботи АРМів необхідно обовязково визвати процедуру призначення нових імен ""Інфо"" для таблиць із зміненою кількостю стовбців", "Так", "Нехай не робить")
+  if vozvrat then
+schet10 = 0
+do
+schet10 = schet10 + 1
+ if tabs_name(schet10) = ta_name then
+  first_val = schet10
+  exit do
+ end if 
+loop while schet10 <> tabs_num
+
+
+
+Do Case ta_name
+  Case rajon_table 
+'   first_val = 
+  Case np_table
+  Case zal_sets_table
+
+'убрал спец слои:
+'  Case perechvat_table
+'  Case sirena_table
+'  Case structur_table
+'  Case struct_tr_table
+'  Case cordon1_table 
+'  Case cordon2_table 
+End Case
+    
+    call adm_info
+   else
+schet10 = 0
+do
+schet10 = schet10 + 1
+ if tabs_name(schet10) = ta_name then
+  first_val = schet10
+  exit do
+ end if 
+loop while schet10 <> tabs_num
+
+Do Case ta_name
+  Case rajon_table 
+'   first_val = 
+  Case np_table
+  Case zal_sets_table
+  Case perechvat_table
+  Case sirena_table
+  Case structur_table
+  Case struct_tr_table
+  Case cordon1_table 
+  Case cordon2_table 
+End Case
+    
+    call adm_info
+  
+  end if
+
+
+end sub
+
+
+
+sub admin_obnulenie
+' процедура обнуления для админа
+' пока здесь только подготовка массива для второго инфо-диалога
+dim schet4 as smallint
+schet4 = 0 
+do 
+ schet4 = schet4 + 1
+ info_box(schet4).id_num = schet4
+ info_box(schet4).sh_yes = 1
+'потом убрать это:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*
+ info_box(schet4).edit = ""
+
+
+loop while schet4 <> max_num_of_columns
+
+num_of_part = 0
+first_val = 1
+
+end sub
+
+
+
+
+
+
+
+
+
+'-------------- процедура начальной загрузки слоев (аналог workspace`a) -------------
+'---- эту процедуру разбил на две части: открытие таблиц --> initial (находится в shell1 и admin1)
+'---- и рисование базовой карты --> put_maps_first и put_maps (в файле init)
+
+Sub initial 
+'?????????????? выяснить с editable off/on в layere перехвата ??????????????????
+prob_tab_name3 = "Область1"
+
+
+Open Table map_dir+prob_tab_name3 as obl1_table                Interactive
+
+Open Table map_dir+"Область2" as obl2_table                Interactive
+
+ 'убрал их в связи с переводом в удосконалені автодороги:
+ 'Open Table map_dir+"автостради" As avtostr_table         
+
+Open Table map_dir+"мости" As most_table                   Interactive
+
+Open Table map_dir+"удосконалені_автодороги" As good_avtoshl_table  Interactive
+Open Table map_dir+"автодороги" As avtoshl_table                    Interactive
+Open Table map_dir+"грунтові_дороги" As earth_r_table      Interactive
+Open Table map_dir+"залізниці" As zal_dor_table            Interactive
+Open Table map_dir+"станції_всіх_класів" As zal_sets_table Interactive
+
+Open Table map_dir+"населені_пункти" As np_table           Interactive
+Open Table map_dir+"райони" As rajon_table                  Interactive
+Open Table map_dir+"Кордони" As polit_cordon_table         Interactive
+
+Open Table map_dir+"інші" As inshi_table                   Interactive
+Open Table map_dir+"гідрографія" As gidr_table             Interactive
+Open Table map_dir+"рельєф" As reljef_table                Interactive
+Open Table map_dir+"рослинність" As rastit_table           Interactive
+
+'создание списка таблиц для определения инфо
+dim schet1 as integer
+
+tabs_num = NumTables()
+
+schet1 = 0
+tabs_list = ""
+do 
+  schet1 = schet1 + 1
+  tabs_name(schet1) = TableInfo(schet1,TAB_INFO_NAME)
+  tabs_list = tabs_list+ tabs_name(schet1) + ";"
+
+loop while schet1 <> tabs_num
+
+Open Table map_dir+"Службова_легенда" as Leg1_table        Interactive
+Open Table map_dir+"вибір_нп" As selection_table           Hide Interactive
+Open Table map_dir+"вибір_району" As R_selection_table     Hide Interactive
+
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'в АРМе оператора добавлены ограничения на доступ к таблицам
+'возможно если делаю один общий ввести вызов соотв процедуры при попытке 
+'попасть в меню администратора
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+End Sub 'конец процедуры открытия таблиц
+
+Sub password
+dim file_name1, passw, gettingpw as string,
+    f as smallint
+file_name1 = Prog_dir+ini_file
+ Open File file_name1
+  For Input   As # 1
+  CharSet "WindowsCyrillic"
+'dim sch2 as smallint
+
+ Line Input # 1, passw
+'здесь можно поставить всякие преобразования пароля из закодированного ранее
+'программой системного администратора 
+ oper_passw = Ltrim$(passw)
+ Line Input # 1, passw
+adm_passw = Ltrim$(passw)
+passw = Ltrim$(passw)
+
+ Close File # 1
+
+f = 0
+do f = f + 1
+ Dialog
+ Width 195
+' Width 140
+'  Title "Уведіть, будь ласка, пароль:"
+  Title "АРМ адміністратора баз даних"
+'  Control EditText
+'   Position 30,5
+'   Into gettingpw
+'   Password
+ Control StaticText 
+  Title "Уведіть, будь ласка, пароль:"
+   Position 3,7
+  Control EditText
+   Position 102,5
+   Into gettingpw
+   Password
+
+
+ Control OKButton
+  Position 50,22
+  Title "Так"
+ Control CancelButton
+  Position 105,22
+  Title "Відмінити"
+   If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      End Program
+      ' пока убрал: End Mapinfo
+   End If
+   
+   If passw = gettingpw then
+    exit sub
+   end if
+loop while f <> 10 
+  End Program
+end sub
+
+
+Sub Buttons_out 'удаление лишних кнопок в панелях инструментов
+ 'оставляю тоько шесть кнопок, поэтому удаляю все панели инструментов и создаю новую
+
+ Create ButtonPad "Функції" As 
+  PushButton
+   HelpMsg "Повернути зображення до початкової форми\nПочаткове зображення"
+   Calling SOS2
+   Icon MI_ICON_EMERGENCY_4
+   ID 10000
+
+' ToolButton
+'   HelpMsg "Поточна інформація\nпоточна інформація"
+'   Calling M_TOOLS_SELECTOR
+'   Icon MI_ICON_ARROW
+'   Cursor MI_CURSOR_ARROW
+'   ID 10007
+
+  ToolButton
+   HelpMsg "Переміщення мапи\nпереміщення мапи"
+   Cursor MI_CURSOR_CROSSHAIR  'MI_CURSOR_GRABBER
+  Calling M_TOOLS_RECENTER
+   Icon MI_ICON_GRABBER
+   ID 10001
+
+  ToolButton
+   HelpMsg "Виведення довідкової інформації таблиць про об'єкт\nінформація"
+   Calling M_TOOLS_PNT_QUERY
+   Icon MI_ICON_INFO
+   Cursor  MI_CURSOR_CROSSHAIR
+   ID 10002
+
+  ToolButton
+   HelpMsg "Встановлення підписів до об'єктів\nпідпис"
+   Calling M_TOOLS_LABELER
+   Icon MI_ICON_LABEL
+   Cursor  MI_CURSOR_CROSSHAIR
+   ID 100022
+
+  ToolButton  
+   HelpMsg "Визначення відстанів\nвідстані"
+   Calling M_TOOLS_RULER
+   Icon MI_ICON_RULER
+   ID 10003
+  PushButton
+   HelpMsg "Збільшення мірила\nзбільшення мірила"
+   Calling scale_plus
+   Icon MI_ICON_ZOOM_IN
+   ID 10004
+  PushButton
+   HelpMsg "Зменшення мірила\nзменшення мірила"
+   Calling scale_minus
+   Icon MI_ICON_ZOOM_OUT
+   ID 10005
+  PushButton
+   HelpMsg "Довільна зміна мірила\nзміна мірила"
+   Calling scale
+   Icon MI_ICON_ZOOM_QUESTION
+   ID 10006
+
+  ToggleButton
+   HelpMsg "Виведення легенди до мапи\nвиведення легенди"
+   Calling show_hide_legend
+   Icon MI_ICON_MISC_7
+   ID 10008
+   
+
+
+  Width  5    '4      8
+  Position (17.5,2) Units "cm"
+  ToolBarPosition (0,0)
+
+         'call destroy_old_buttons
+End Sub
+
+Sub destroy_old_buttons
+ Alter ButtonPad ID 1
+   Destroy
+ Alter ButtonPad ID 2
+   Destroy
+Alter ButtonPad ID 3
+   Destroy
+Alter ButtonPad ID 4
+   Destroy
+'Alter ButtonPad ID 5
+'   Destroy
+end sub
+
+Sub adm_nastr1
+Dim new_eye_stand_menu as logical
+Dialog 
+ Title "Загальні настройки оболонки"
+ Control StaticText
+   Title "Залишати стандартне меню MapInfo"
+  Control CheckBox
+    Value eye_stand_menu
+    Into new_eye_stand_menu
+
+  Control OKButton
+    Title "Так"
+  Control CancelButton
+    Title "Відмінити"
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+   End If
+    
+end sub
+
+
+'##############################################################################################
+Sub setting_of_tables1
+
+Dialog 
+  Title "Вибір таблиць для використання у оболонці"
+'  Width 290
+ Control StaticText 
+   Position 5,5
+   Width 260  Height 40
+   Title "Перед вибором таблиць бажано, щоб усі вони були відкриті у MapInfo. Якщо це не так, оберить, будь-ласка кнопку [Відкрити таблиці...]" 
+
+
+
+  Control OKButton
+    Title "Обираю таблиці, які відмітив"
+  Control CancelButton
+    Title "Відмінити вибір"
+  Control Button
+    Title "Відкрити таблиці..."
+    Calling dop_tables_opening
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+   End If
+
+
+end sub
+
+Sub dop_tables_opening 'вызывается из диалога выбора таблиц для оболочки
+' потсавить еще закрытие или временное убирание и потом возвращение старого диалогового окна
+  Run Menu Command 102
+end sub
+
+
+
+Sub adm_browse
+  Run Menu Command 601
+end sub
+
+
+Sub adm_print
+  Run Menu Command 111
+  Run Menu Command 112
+end sub
+
+
+Sub adm_passwords
+Dim new_passw1, new_passw2, new_passw11, new_passw22 as string
+
+ Dialog
+  Title "Зміна паролів для АРМів"
+  Control StaticText
+    Title "Уведіть новий пароль до АРМу адміністратора:  "
+  Control EditText
+    Into new_passw1
+    Password
+
+  Control StaticText
+    Title "Уведіть новий пароль до АРМу оператора:  "
+    Position 15,20
+  Control EditText
+    Into new_passw2
+    Password
+
+  Control OKButton
+    Title "Так"
+  '  Calling OK_passw
+  Control CancelButton
+    Title "Відмінити зміну паролю"
+
+   If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+   End If
+
+ Dialog
+  Title "Підтвердження зміни паролю для АРМів"
+  Control StaticText
+    Title "Знову уведіть новий пароль до АРМу адміністратора:  "
+  Control EditText
+    Into new_passw11
+    Password
+
+  Control StaticText
+    Title "Знову уведіть новий пароль до АРМу оператора:  "
+    Position 15,20
+  Control EditText
+    Into new_passw22
+    Password
+    
+
+  Control OKButton
+    Title "Так"
+  '  Calling OK_passw
+  Control CancelButton
+    Title "Відмінити зміну паролю"
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+   End If
+
+if new_passw1 <> "" then
+  if new_passw1 <> new_passw11 then
+     Note "Пароль до АРМу адміністратора не отримав точного підтвердження -- залишається старий пароль"   
+     new_passw1 = adm_passw
+  else
+   adm_passw = new_passw1
+  end if 
+else ' пароль="" 
+ Note "Пароль до АРМу адміністратора не був уведений -- залишається старий пароль"
+ new_passw1 = adm_passw
+end if 
+
+
+if new_passw2 <> "" then
+  if new_passw2 <> new_passw22 then
+     Note "Пароль до АРМу оператора не отримав точного підтвердження -- залишається старий пароль"   
+     new_passw2 = oper_passw
+  else
+   oper_passw = new_passw2
+  end if 
+else ' пароль="" 
+ Note "Пароль до АРМу оператора не був уведений -- залишається старий пароль"
+ new_passw2 = oper_passw
+end if 
+
+temp_ini_file = "obninsk1956"
+ Save File prog_dir+ini_file AS prog_dir+temp_ini_file
+ Open File prog_dir+ini_file 
+   For Input As #13
+   CharSet "WindowsCyrillic"
+ Open File prog_dir+temp_ini_file
+   For OutPut As #14
+   CharSet "WindowsCyrillic"
+dim sch1 as smallint,
+  str1, str2, string1 as string
+sch1 = 0
+str1 = Space$(200)+Str$(oper_passw)
+str2 = Space$(300)+Str$(adm_passw)
+do
+ sch1 = sch1 + 1
+ Line Input #13,string1
+  Do Case sch1
+    Case 1
+     Print #14, str1
+    Case 2
+     Print #14, str2
+    Case Else
+     Print #14, string1
+  End Case
+loop until string1 = ""
+
+Close File #13
+Close File #14
+
+Kill prog_dir+ini_file
+Save File prog_dir+temp_ini_file As prog_dir+ini_file
+Kill prog_dir+temp_ini_file
+
+end sub
+
+
+
+Sub adm_info '!!!!!!! отключил его вызов в меню !!!!!!!!!!!
+
+'Print str$(tabs_num)
+'Print "Таблица №4:"+str$(TableInfo(4,TAB_INFO_NAME))
+
+call first_info_dial
+
+end sub
+
+
+
+
+'******************************************************************************
+'процедура для программы системного адинистратора -- должна автоматически выполняться 
+'при выходе из программы для слоев городов и сел в случае добавления строк
+'!!!+ обязательно должна быть паковка таблиц в случае появления в них пустых строк !!!!!!!
+Sub sorting_rows
+'!!!!!!!!!! видимо сделать ее с параметрами -- имя табл, имя столбца сортировки
+ Select * From np_table
+   Order By np_label
+'далее идет удаление старой таблицы и запись отсортированной вместо 
+'старой с тем же именем
+' сообщения о процессе убрать или изменить
+End Sub
+
+
+Sub first_info_dial  '!!!!!!! отключил родительскую подпрограмму !!!!!!!!!!!
+
+Dialog
+ Title "Встановлення назв для полів виводу у вікні ""Інфо"""
+ Control StaticText
+ Title "Оберить таблицю для призначення полів виводу:"
+ 
+ Control ListBox 
+ Position 50, 18 Width 150 Height tabs_num*8+5
+  Title tabs_list
+  Value first_val
+  Into sel_tab_num
+
+ Control OKButton
+  Title "Відредагувати імена полей у таблиці"
+
+ Control CancelButton 
+  Title "Завершити роботу з диалогом"
+
+   If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+   End If
+
+'дальше читаю рез-ты этого диалога и перехожу в диалог выбранной таблицы (через Case)
+'(такой как заказал Вова) а оттуда переход обратно в диалог списка таблиц
+
+'sel_tab_name = tabs_name(sel_tab_num)
+columns_num = TableInfo(tabs_name(sel_tab_num),TAB_INFO_NCOLS)
+
+dim col_and_num(max_num_of_columns) as string
+
+column_names = ""
+schet2 = 0
+do 
+  schet2 = schet2 + 1
+  col_and_num(schet2) = "COL"+STR$(schet2)
+  column_name(schet2) = ColumnInfo(tabs_name(sel_tab_num),col_and_num(schet2),COL_INFO_NAME)
+  column_names = column_names + column_name(schet2)+ ";"
+print "Название первого столбца"+column_name(schet2)
+loop while schet2 <> columns_num
+
+'здесь проверка количества столбцов и если больше 25 - вызов процедуры 
+'диалога выбора  до 25 столбцов вывода
+' возможно, уместно будет сделать потом как бы две части: 
+' первых 25 и вторых до 25 т.е. сумма выводимых в инфо (возможных для вывода) столбцов -- до 50
+ if columns_num > 25 then 
+  call info_dial_25_40
+ end if 
+
+'назначение массиву info_box значений соотв массива типа info_data по выбору для соотв 
+
+Do Case tabs_name(sel_tab_num)
+  Case rajon_table 
+    call info_data2(rajon_i)
+  Case np_table
+    call info_data2(np_i)
+  Case zal_sets_table
+    call info_data2(zal_set_i)
+
+'убрал спец. таблицы:
+'  Case perechvat_table
+'    call info_data2(perechvat_i)
+'  Case sirena_table
+'    call info_data2(sirena_i)
+'  Case structur_table
+'    call info_data2(ovs_i)
+'  Case struct_tr_table
+'    call info_data2(ovst_i)
+'  Case cordon1_table 
+'    call info_data2(pv_i)
+'  Case cordon2_table 
+'    call info_data2(pvpp_i)
+End Case
+
+
+Do Case columns_num
+  Case 1
+   call info_dial_1
+  Case 2
+   call info_dial_2
+  Case 3
+   call info_dial_3
+  Case 4
+   call info_dial_4
+
+  Case 5
+   call info_dial_5
+  Case 6
+   call info_dial_6
+  Case 7
+   call info_dial_7
+  Case 8
+   call info_dial_8
+  Case 9
+   call info_dial_9
+  Case 10
+   call info_dial_10
+  Case 11
+   call info_dial_11
+  Case 12
+   call info_dial_12
+  Case 13
+   call info_dial_13
+  Case 14
+   call info_dial_14
+  Case 15
+   call info_dial_15
+  Case 16
+   call info_dial_16
+  Case 17
+   call info_dial_17
+  Case 18
+   call info_dial_18
+  Case 19
+   call info_dial_19
+  Case 20
+   call info_dial_20
+  Case 21
+   call info_dial_21
+  Case 22
+   call info_dial_22
+  Case 23
+   call info_dial_23
+  Case 24
+   call info_dial_24
+  Case 25
+   call info_dial_25
+End Case
+end sub    ' конец процедуры first_info_dial
+
+
+
+sub info_dial_25_40
+
+end sub
+
+
+'!!!!!!!!!!!!!!! отключил родительскую подпрограмму !!!!!!!!!!!!!!!!!!!!!
+Sub info_data2(tabs_dat(max_num_of_columns) as info_data)
+dim schet8 as smallint,
+  tmp_dat as string
+
+schet8 = 0
+Do 
+  schet8 = schet8+1
+  info_box(schet8).sh_yes = tabs_dat(schet8).sh_yes
+  info_box(schet8).edit = tabs_dat(schet8).good_name
+  tmp_dat = tabs_dat(schet8).good_name
+Loop while tmp_dat <> ""
+End sub
+
+'*************************************************************************************
+' все sub info_dial_1 - 25  --> в файлах adm_info1,2,3
+'*************************************************************************************
+
+' процедура записи в файл и новых данных из info_box в соотв. массив info_data
+' процедура вызывается из одной из 25-ти подпрограмм info_dial
+' поскольку их вызов отключен отключением вызова в меню верхней родительской 
+' процедуры(adm_info), данная процедура также не вызывается ниоткуда
+
+Sub writing_info_data
+Dim new_string, old_string as string,
+ new_str_num, schet5 as smallint
+ 
+temp_ini_file = "obninsk_1979"
+ 
+Do Case tabs_name(sel_tab_num)
+ Case rajon_table 
+   new_str_num = 3
+ Case np_table
+   new_str_num = 4
+ Case zal_sets_table
+   new_str_num = 5
+
+'убрал специальные таблицы
+' Case perechvat_table
+'   new_str_num = 6
+' Case sirena_table
+'   new_str_num = 7
+' Case structur_table
+'   new_str_num = 8
+' Case struct_tr_table
+'   new_str_num = 9
+' Case cordon1_table 
+'   new_str_num = 10
+' Case cordon2_table 
+'   new_str_num = 11
+
+End Case 
+
+ Save File prog_dir+ini_file AS prog_dir+temp_ini_file
+ Open File prog_dir+ini_file 
+   For Input As #13
+   CharSet "WindowsCyrillic"
+ Open File prog_dir+temp_ini_file
+   For OutPut As #14
+   CharSet "WindowsCyrillic"
+
+ ' далее в цикле чтение всех строк из ини, печать их в темп с заменой 
+ ' выясненной ранее (поставить выяснение в начале этой процедуры) одной строки 
+ ' для редактировавшейся таблицы (вначале еще цикл с формированием этой одной 
+ ' строки из неск переменных)
+
+new_string = ""
+schet5 = 0 
+do
+ schet5 = schet5 + 1
+ new_string =new_string + column_name(schet5)+"@"+info_box(schet5).sh_yes
+  if info_box(schet5).edit = "" then 
+      new_string = new_string + "@"+column_name(schet5)
+   else
+      new_string = new_string + "@"+info_box(schet5).edit
+  end if 
+  new_string = new_string + "@@@"
+loop while schet5 <> columns_num 
+
+old_string = ""
+schet5 = 0
+do 
+  schet5 = schet5 + 1
+  Line Input #13, old_string
+  if schet5 = new_str_num then
+    Print #14, new_string
+   else
+    Print #14, old_string
+  end if
+loop until old_string = ""      'until EOF(13)
+
+Close File #13
+Close File #14
+
+Kill prog_dir+ini_file
+Save File prog_dir+temp_ini_file As prog_dir+ini_file
+Kill prog_dir+temp_ini_file
+
+'назначение для соотв массива типа info_data новых значений из массива info_box 
+' назначение числа столбцов данной таблицы (для проверки соответствия при выходе)
+
+Do Case tabs_name(sel_tab_num)
+  Case rajon_table 
+    call info_box_data2(rajon_i)
+    rajon_columns_num = columns_num
+  Case np_table
+    call info_box_data2(np_i)
+    np_columns_num = columns_num
+  Case zal_sets_table
+    call info_box_data2(zal_set_i)
+    zal_set_columns_num = columns_num
+
+'убрал спец. таблицы:
+'  Case perechvat_table
+'    call info_box_data2(perechvat_i)
+'    perechvat_columns_num = columns_num
+'  Case sirena_table
+'    call info_box_data2(sirena_i)
+'    sirena_columns_num = columns_num
+'  Case structur_table
+'    call info_box_data2(ovs_i)
+'    ovs_columns_num = columns_num
+'  Case struct_tr_table
+'    call info_box_data2(ovst_i)
+'    ovst_columns_num = columns_num
+'  Case cordon1_table 
+'    call info_box_data2(pv_i)
+'    pv_columns_num = columns_num
+'  Case cordon2_table 
+'    call info_box_data2(pvpp_i)
+'    pvpp_columns_num = columns_num
+End Case
+end sub 
+
+Sub info_box_data2(tabs_dat(max_num_of_columns) as info_data)
+dim schet8 as smallint,
+  tmp_dat as string
+
+schet8 = 0
+Do 
+  schet8 = schet8+1
+  tabs_dat(schet8).sh_yes =    info_box(schet8).sh_yes
+  tabs_dat(schet8).good_name = info_box(schet8).edit
+ 
+Loop while schet8 <> columns_num
+End sub

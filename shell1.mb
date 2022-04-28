@@ -1,0 +1,497 @@
+Include "mapbasic.def"
+Include "menu.def"
+Include "icons.def"
+
+Include "globals1.def"
+
+
+Declare Sub first_auth
+Declare Sub EndHandler
+
+Declare Sub Main
+Declare Sub Initial
+Declare sub Put_maps_first
+Declare Sub Put_maps
+Declare sub Put_names_and_first_numbers
+Declare Sub Begin1
+Declare Sub preparing_data
+Declare Sub Buttons_out
+Declare Sub Destroy_old_buttons
+Declare Sub scale_plus
+Declare Sub scale_minus
+
+Declare Sub legenda
+Declare Sub show_hide_legend
+Declare Sub Password
+
+Declare Sub read_data_for_info
+
+
+ Declare Sub Goodbye
+
+ Declare Sub rajon
+
+ Declare Sub mapping_of_Layers
+
+ Declare Sub rajoni
+ Declare Sub obltown
+ Declare Sub Selo_town
+ Declare Sub r_station
+ Declare Sub Umvs
+ Declare Sub Post
+ Declare Sub Sirena
+ Declare Sub Umvs_tr
+ Declare Sub Cordon
+ Declare Sub Cordon_punkt
+
+ Declare Sub Scale
+ Declare Sub Nagruzka
+ Declare Sub buttons_panel
+ Declare Sub SOS1
+ Declare Sub SOS2
+Declare Sub WinClosedHandler
+
+  Declare Sub Help1
+  Declare Sub Help_authors
+ Declare Sub show_1_layer(show_yes as logical, table_name as string, 
+                          column_of_label as alias, show_font as font)
+'----- процедура к кнопкам ----------
+' Declare Sub show_1b_layer (show_yes, button_show_ind as logical, button_id as smallint, 
+'                   table_name as string, column_of_label as alias, show_font as font)
+ Declare Sub show_1_layer_label_off(show_yes as logical, table_name as string, 
+                            column_of_label as alias)
+
+ Declare Sub show_1_layer_without_label(show_yes as logical, table_name as string)
+
+
+ Declare Sub disable_sumigni
+Declare Sub selo_town_r
+Declare Sub parallel_nplist
+Declare Sub selo_town_all
+Declare sub parallel_listbox
+Declare sub parallel_edittext
+Declare Sub Delete_select
+Declare sub deletE_first_layers
+
+Declare Sub sinchro_odessa
+Declare Sub init_odes_rajones
+
+Declare Sub Custom_scale
+Declare Sub hide_custom 
+'-------------процедуры к кнопкам ------------
+'Declare Sub nagruzka_button
+'Declare Sub show_hide_layer(button_id as smallint, show_indicat as logical, 
+'                            layer_name as string, label_name as alias)
+
+ Declare Sub sorting_rows  'к прогр. системного администратора
+
+ Declare Sub sprav_rajon       
+Declare Sub Cancel_sub  'переход в режим ожидания
+
+Declare Sub oper_map_stop
+
+Sub Main
+'------------- setting of path to the maps and program files ----------------
+'!!!!! may be past it`l be best to make special query and saving in ini-file !!!!!
+'!!! возможно вместо пременных пути поставить функции пути к программе и  мапинфо и 
+'возможно добавить им  подкаталог, который будет создавться при инсталляции !!!!!!!!!!!!!!!!!
+prog_dir = ProgramDirectory$()+"mapshell\" 
+map_dir = ProgramDirectory$()+"mapshell\maps\" 
+  'map_path = map_dir + "init_obl.wor"
+
+
+'!!!!!!!!!!! убрал две следующие строки на время отладки !!!!!!!!!!!!!!!
+'call password
+'call begin1 'проверка на наличие открытых файлов в мапинфо: если они есть закрываю без сохранения
+
+' в эту процедуру перенес назначение имен таблиц и присвоение начальных значений переменным:
+call  Put_names_and_first_numbers
+
+ ' *****************************************************
+' !!!!!!!!!! mtb Вывод заставки и во время заставки дожны загрузиться все данные !!!!!!!!!!!
+ ' *****************************************************
+
+
+'в 45-й мапинфо это не нужно:
+'Menu Bar Hide   'убираю меню Мапинфо
+
+'пока паллиатив по поводу матюков в StatusBar 
+'(убрать эту строку после решения вопросов с русской версией) :
+ StatusBar Hide
+
+ '!!!!!!!!!!!!!!!  убрать еще почти все кнопки !!!!!!!!!!!!!!!!!!!!!!!
+Call Buttons_out 'удаление лишних кнопок в панелях инструментов
+
+'--- вывод начального workspase`a ---
+'!!!!!!!!!!!на время отладки убрал следующую строку: !!!!!!!!!!!!
+'добавить проверку на открытость таблиц в мапинфо и если они там есть --- их закрытие 
+'эта проверка делается в begin1 и выдатся запрос на закрытие без сохранения
+
+
+
+ Call Initial  '<-- !!!!!!!!!!здесь только открываю таблицы!!!!!!!!!!!!!!!!!!!!!!
+        'след строка нужна на время отладки и должна быть 
+        'противоположна по комментированности
+ 'main_win_id = FrontWindow()  
+'Note str$(main_win_id)
+
+'проверял возможность присвоения названию пункта меню строчной переменной:
+ prob_menu_name1 = "Пошук"
+
+ Create Menu "Вихід з АРМу" As 
+  "&Вихід... /W@x" HelpMsg "Закінчення роботи з картографічною оболонкою" 
+    calling Goodbye 
+ Create Menu prob_menu_name1 As
+  "&Району.../W@r" HelpMsg "Пошук району" calling Rajon,
+  "(&Суміжних районів/W@s" HelpMsg "Вивід суміжних районів" calling Rajoni,
+  "&Міста обласного підпорядкування..." HelpMsg "Пошук міста обласного підпорядкування" 
+    calling Obltown,
+  "&Населеного пункту..." HelpMsg "Пошук населенного пункту" calling Selo_town,
+  "&Залізничної станції..." HelpMsg "Пошук залізничної станції" calling r_station
+
+'************************ убрал нижнюю часть меню ******************************
+'  "Структурного підрозділу &УМВС в Одеській області..." 
+'    HelpMsg "Пошук структурного підрозділу УМВС В Одеській області"  calling Umvs,
+'  "Поста за планом ""&Перехоплення""..." HelpMsg "Пошук поста за планом ""Перехоплення""" 
+'    calling Post,
+'  "Заслону за планом ""С&ирена""..." HelpMsg "Пошук заслону за планом ""Сирена""" 
+'    calling Sirena,
+'  "Структурного підрозділу УМВС на &залізниці..." 
+'    HelpMsg "Пошук структурного підрозділу УМВС на залізниці" 
+'    calling Umvs_tr,
+'  "Підрозділу при&кордонних військ..." HelpMsg "Пошук підрозділу прикордонних військ" 
+'    calling Cordon,
+'  "Прик&ордонного пункту пропуску..." HelpMsg "Пошук прикордонного пункту пропуску" 
+'    calling Cordon_punkt
+
+
+ Create Menu "Вид" As
+  "&Мірило..." HelpMsg "Вибір мірила зображення..." calling Scale,
+  "(-",
+  "&Навантаження..." HelpMsg "Вибір навантаження до мапи" calling Nagruzka,
+  "(-",
+  "Повернення панелі &функцій" HelpMsg "Повернення кнопкової панелі функцій" 
+   calling buttons_panel,
+  "&Початкове зображення" HelpMsg "Повернути зображення до початкової форми" calling SOS2
+ Create Menu "Допомога" As 
+  "&Довідка щодо роботи програми" HelpMsg "Вивід довідкової інформації про програму" 
+   calling Help1,
+  "&Про програму..." HelpMsg "Інформація про програму" 
+   calling Help_authors 
+
+ 
+ Create Menu Bar As 
+  prob_menu_name1, "Вид", "Допомога", "Вихід з АРМу"
+'*** создание кнопок отображения нагрузки --- начало, остальное отложили до следующей версии 
+'видимо, сами кнопки необходимо создать в VisualBasic`e
+'операторы вжатия-отжима кнопок включены в процедуры вывода нагрузки после поиска района
+'(процедура show_1b_layer)
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!:
+'для нормальной работы кнопок возможно, необходимо их создание поставить до вызова загрузки таблиц и рисования 
+'слоев и сделать кнопки не вжатыми, а при рисовании слоев необходимо вжимать кнопки --- 
+' --- это на случай если кнопки совсем не захотят корректно меняться с меню вместе 
+'********* !!!!!!!!! на этом этапе все кнопки убираю: !!!!!!!!!!!!!! ********* 
+' Create ButtonPad "Навантаження" As 
+'  ToggleButton
+'   HelpMsg "Накреслення/ненакреслення меж районів\nрайони"
+'   Calling nagruzka_button
+'   Icon MI_ICON_DISTRICT_MANY
+'   ID 101
+'   Check
+'  ToggleButton
+'   HelpMsg "Накреслення/ненакреслення населенних пунктів\nнаселені пункти"
+'   Calling nagruzka_button
+'   Icon MI_ICON_REALESTATE_6
+'   ID 102
+'   Check
+'
+' Title "Навантаження"
+
+' !!!!!!!!!! здесь рисую карту !!!!!!!!!!
+   call put_maps_first
+   Call Put_maps 
+
+     '   call first_auth
+   
+
+   call preparing_data
+'подготовка легенды
+   call legenda 
+
+  call read_data_for_info
+
+  
+'легкая проверка на "одесскость" используемых таблиц:
+    if InStr(1,np_names,"Одеса") = 0 then 
+      Note "Дані у таблицях були некоректно змінені, зверниться до розробників !"
+      End Program
+    End If
+    if InStr(1,np_names,"Котовськ") = 0 then 
+      Note "Дані у таблицях були некоректно змінені, зверниться до розробників !"
+      End Program
+    End If
+
+
+Alter Button ID 10001  Check
+Run Menu Command ID 10001
+
+
+'Close Window Message 
+
+Set Window Info
+  Font simple_font
+  Title "Інформація"
+ Position (0,20.5) Units "cm"
+ Width 6 Units "cm" Height 4 Units "cm"
+ 'Front
+ Default Access
+
+Set window Ruler
+ Title "Дистанція"
+
+Set Window  Help Off
+
+End Sub   'конец главного блока *!*!*!*!*!*!*!*!*!*!**!*!*!**!*!*!*!**!*!*!*!*!*
+
+
+  '*****************************************************************************
+ Sub Goodbye
+dim otvet as logical
+     'mtb !!!! dialog about exit
+     'два пункта меню возможно потом поставить: выход вообще или закрытие таблиц
+Dialog 
+ Title "Завершення роботи картографічної облонки"
+ Width 290
+ Control StaticText
+  Position 60,5
+  Title "На цьому роботу із програмою буде завершено !"
+ Control StaticText
+
+
+  Position 60,17
+  Title "Ви дійсно бажаєте завершити роботу програми ?"
+ Control OKButton
+  Position 80,34
+  Title "Так"
+ Control CancelButton
+  Position 130,34
+  Title "Ні, треба повернутися"
+ If CommandInfo(CMD_INFO_DLG_OK) Then
+     '!!!!!!!закрывать все таблицы при выходе !!!!!!!!!!
+             'Close All 
+  Create Menu Bar As Default 
+  Create ButtonPads As Default
+  Set Handler WinClosedHandler Off
+  Close All
+  End Program
+  
+ else 
+  Exit Sub
+ end if 
+ End Sub
+
+'-------------- процедура начальной загрузки слоев (аналог workspace`a) -------------
+'---- эту процедуру разбил на две части: открытие таблиц --> initial (находится в shell1 и admin1)
+'---- и рисование базовой карты --> put_maps_first и put_maps (в файле init)
+
+Sub initial 
+'?????????????? выяснить с editable off/on в layere перехвата ??????????????????
+Open Table map_dir+"Область1" as obl1_table   ReadOnly Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"Область2" as obl2_table   ReadOnly Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"Службова_легенда" as Leg1_table        ReadOnly Interactive
+ CALL OPER_MAP_STOP
+
+
+Open Table map_dir+"залізниці" As zal_dor_table            ReadOnly Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"станції_всіх_класів" As zal_sets_table ReadOnly Interactive
+ CALL OPER_MAP_STOP
+
+Open Table map_dir+"мости" As most_table            ReadOnly Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"Кордони" As polit_cordon_table  ReadOnly Interactive
+ CALL OPER_MAP_STOP
+
+Open Table map_dir+"удосконалені_автодороги" As good_avtoshl_table  ReadOnly Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"автодороги" As avtoshl_table            ReadOnly Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"грунтові_дороги" As earth_r_table  ReadOnly Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"гідрографія" As gidr_table             ReadOnly Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"населені_пункти" As np_table           ReadOnly Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"рослинність" As rastit_table           ReadOnly Interactive
+ CALL OPER_MAP_STOP
+
+'уточнить, куда именно их ставить:
+Open Table map_dir+"рельєф" As reljef_table           ReadOnly Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"інші" As inshi_table              ReadOnly Interactive
+ CALL OPER_MAP_STOP
+
+Open Table map_dir+"райони" As rajon_table                  ReadOnly Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"вибір_нп" As selection_table           Hide Interactive
+ CALL OPER_MAP_STOP
+Open Table map_dir+"вибір_району" As R_selection_table     Hide Interactive
+ CALL OPER_MAP_STOP
+
+End Sub 'конец процедуры открытия таблиц
+
+Sub oper_map_stop
+ Set Table TableInfo(0,TAB_INFO_NAME)
+    UserMap Off
+    UserBrowse Off
+    UserClose Off
+    UserEdit Off
+    UserRemoveMap Off
+    UserDisplayMap Off
+end sub 
+
+
+
+Sub password
+dim file_name1, passw, gettingpw as string,
+    f as smallint
+file_name1 = Prog_dir+"oko.ini"
+ Open File file_name1
+  For Input   As # 1
+  CharSet "WindowsCyrillic"
+
+ Input # 1, passw
+'здесь можно поставить всякие преобразования пароля из закодированного ранее
+'программой системного администратора 
+ passw = Ltrim$(passw)
+Close File # 1
+
+f = 0
+do f = f + 1
+ Dialog
+ Width 195
+' Width 140
+'  Title "Уведіть, будь ласка, пароль:"
+  Title "АРМ користувача"
+'  Control EditText
+'   Position 30,5
+'   Into gettingpw
+'   Password
+ Control StaticText 
+  Title "Уведіть, будь ласка, пароль:"
+   Position 3,7
+  Control EditText
+   Position 102,5
+   Into gettingpw
+   Password
+
+
+ Control OKButton
+  Position 50,22
+  Title "Так"
+ Control CancelButton
+  Position 105,22
+  Title "Відмінити"
+   If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      End Program
+      ' пока убрал: End Mapinfo
+   End If
+   
+   If passw = gettingpw then
+    exit sub
+   end if
+loop while f <> 10 
+  End Program
+end sub
+
+
+Sub Buttons_out 'удаление лишних кнопок в панелях инструментов
+ 'оставляю только шесть кнопок, поэтому удаляю все панели инструментов и создаю новую
+
+ Create ButtonPad "Функції" As 
+  PushButton
+   HelpMsg "Повернути зображення до початкової форми\nПочаткове зображення"
+   Calling SOS2
+   Icon MI_ICON_EMERGENCY_4
+   ID 10000
+
+' ToolButton
+'   HelpMsg "Поточна інформація\nпоточна інформація"
+'   Calling M_TOOLS_SELECTOR
+'   Icon MI_ICON_ARROW
+'   Cursor MI_CURSOR_ARROW
+'   ID 10007
+
+  ToolButton
+   HelpMsg "Переміщення мапи\nпереміщення мапи"
+   Cursor MI_CURSOR_CROSSHAIR  'MI_CURSOR_GRABBER
+  Calling M_TOOLS_RECENTER
+   Icon MI_ICON_GRABBER
+    
+   ID 10001
+  ToolButton
+   HelpMsg "Виведення довідкової інформації таблиць про об'єкт\nінформація"
+   Calling M_TOOLS_PNT_QUERY
+   Icon MI_ICON_INFO
+   Cursor  MI_CURSOR_CROSSHAIR
+   ID 10002
+
+  ToolButton
+   HelpMsg "Встановлення підписів до об'єктів\nпідпис"
+   Calling M_TOOLS_LABELER
+   Icon MI_ICON_LABEL
+   Cursor  MI_CURSOR_CROSSHAIR
+   ID 100022
+
+  ToolButton  
+   HelpMsg "Визначення відстанів\nвідстані"
+   Calling M_TOOLS_RULER
+   Icon MI_ICON_RULER
+   ID 10003
+  PushButton
+   HelpMsg "Збільшення мірила\nзбільшення мірила"
+   Calling scale_plus
+   Icon MI_ICON_ZOOM_IN
+   ID 10004
+  PushButton
+   HelpMsg "Зменшення мірила\nзменшення мірила"
+   Calling scale_minus
+   Icon MI_ICON_ZOOM_OUT
+   ID 10005
+  PushButton
+   HelpMsg "Довільна зміна мірила\nзміна мірила"
+   Calling scale
+   Icon MI_ICON_ZOOM_QUESTION
+   ID 10006
+
+  ToggleButton
+   HelpMsg "Виведення легенди до мапи\nвиведення легенди"
+   Calling show_hide_legend
+   Icon MI_ICON_MISC_7
+   ID 10008
+   
+
+
+  Width  5    '4      8
+  Position (17.5,2) Units "cm"
+  ToolBarPosition (0,0)
+
+call destroy_old_buttons
+End Sub
+
+Sub destroy_old_buttons
+ Alter ButtonPad ID 1
+   Destroy
+ Alter ButtonPad ID 2
+   Destroy
+Alter ButtonPad ID 3
+   Destroy
+Alter ButtonPad ID 4
+   Destroy
+'Alter ButtonPad ID 5
+'   Destroy
+end sub
+
+

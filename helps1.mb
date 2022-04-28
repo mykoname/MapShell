@@ -1,0 +1,456 @@
+Declare Sub Help1
+Declare Sub sprav_rajon
+Declare Sub sprav_nagruz
+Declare Sub sprav_obl_t
+Declare Sub sprav_ovs
+Declare Sub sprav_ovst
+Declare Sub sprav_sirena
+Declare Sub sprav_perechvat
+Declare Sub sprav_pv
+Declare Sub sprav_pvpp
+
+Declare Sub help_authors
+Declare Sub help_authors_adm
+
+ Sub Help1  'процедура довідки щодо роботи програми
+Dim x1, y1, dob as smallint
+x1 = 5
+y1 = 5
+dob = 11
+ Dialog  
+  Title "Довідка щодо роботи програми"
+  Control StaticText 
+  Position x1, y1
+   Title "Автоматизоване робоче місце оперативного чергового по управлінню є комплексом процедур пошуку та відображення"
+
+  Control StaticText 
+  Position x1-2, y1+dob
+   Title " різноманітної картографічної інформації. Об'єкти для пошуку визначаються через відповідні пункти меню ""Пошук""."
+
+  Control StaticText 
+  Position x1, y1+dob*2
+   Title "Вибір кожного пункту меню ""Пошук"" призводить до появи спеціалізованого діалогового вікна."
+
+  Control StaticText 
+  Position x1, y1+dob*3
+   Title "Меню ""Вид"" містить додаткові функции АРМу щодо зміни мірила зображення, регулювання навнтаження на мапі" 
+
+  Control StaticText 
+  Position x1-2, y1+dob*4
+   Title " та повернення до початкового стану мапи." 
+
+  Control StaticText 
+  Position x1, y1+dob*5
+   Title "Вибір потрібного пункту меню здійснюється натискуванням лівою клавішею миши."
+
+  Control StaticText 
+  Position x1, y1+dob*6
+   Title "Вибір у діалозі також здійснюється за допомогою лівої клавіши миши."
+ 
+ Control StaticText 
+  Position x1, y1+dob*7+6
+   Title "Для підтвердження свого вибору у діалозі та завершення роботи діалогу необхідно натиснути на кнопку ""Так"" у діалоговому вікні."
+ 
+  Control StaticText 
+  Position x1, y1+dob*8+6
+   Title "Для відміни роботи діалогу без здійснення будь-яких дій необхідно натискувати на кнопку ""Відмінити"" у діалоговому вікні."
+
+
+   Control OKButton 
+  Position x1 + 205, y1 + dob*10+6
+   Title "Так"
+End Sub
+
+Sub sprav_rajon       
+Dim x1, y1, dob as smallint
+x1 = 5
+y1 = 5
+dob = 11
+ Dialog  
+  Title "Допомога"
+  Control StaticText 
+  Position x1, y1
+   Title "У лівому полі діалогу оберить адміністративний район для пошуку та виводу на екран."
+
+  Control StaticText 
+  Position x1, y1+dob
+   Title "Для цього натисніть лівою клавішею миши на ім'я необхідного району."
+
+  Control StaticText 
+  Position x1, y1+dob*2
+   Title "Додатково можна обрати у правій частині діалогу необхідні елементи навантаження,"
+
+  Control StaticText 
+  Position x1, y1+dob*3
+   Title "   які будуть виведені на екран при виведенні району." 
+
+  Control StaticText 
+  Position x1, y1+dob*4
+   Title "   (Необхідно поставити ""галочки"" у відповідних квадратах напроти імен цих елементів)." 
+
+  Control StaticText 
+  Position x1, y1+dob*5+6
+   Title "Для підтвердження свого вибору у діалозі та завершення роботи діалогу натисніть на кнопку ""Так"""
+
+  Control StaticText 
+  Position x1, y1+dob*6+6
+   Title "Для відміни роботи діалогу натисніть на кнопку ""Відмінити"""
+
+
+   Control OKButton 
+  Position x1 + 150, y1 + dob*8+6
+   Title "Так"
+End Sub
+
+
+Sub sprav_nagruz       
+Dim x1, y1, dob as smallint
+x1 = 5
+y1 = 5
+dob = 11
+ Dialog  
+  Title "Допомога"
+
+  Control StaticText 
+  Position x1, y1
+   Title "Оберіть необхідні елементи навантаження, які мають бути виведені на екран."
+
+  Control StaticText 
+  Position x1, y1+dob
+   Title "Для цього необхідно поставити ""галочки"" у відповідних квадратах напроти імен цих елементів." 
+
+  Control StaticText 
+  Position x1, y1+dob*2+6
+   Title "Для підтвердження свого вибору у діалозі та завершення роботи діалогу натисніть на кнопку ""Так""."
+
+  Control StaticText 
+  Position x1, y1+dob*3+6
+   Title "Для відміни роботи діалогу натисніть на кнопку ""Відмінити""."
+
+
+   Control OKButton 
+  Position x1 + 150, y1 + dob*5+6
+   Title "Так"
+End Sub
+
+
+Sub sprav_obl_t
+Dim x1, y1, dob as smallint
+x1 = 5
+y1 = 5
+dob = 11
+ Dialog  
+  Title "Допомога"
+  Control StaticText 
+  Position x1, y1
+   Title "У лівому полі діалогу оберить місто областного підпорядкування для пошуку та виводу на екран."
+
+  Control StaticText 
+  Position x1, y1+dob
+   Title "Для цього натисніть лівою клавішею миши на ім'я необхідного міста."
+
+  Control StaticText 
+  Position x1, y1+dob*2
+   Title "Додатково можна обрати у правій частині діалогу необхідні елементи навантаження,"
+
+  Control StaticText 
+  Position x1, y1+dob*3
+   Title "   які будуть виведені на екран при виведенні міста." 
+
+  Control StaticText 
+  Position x1, y1+dob*4
+   Title "   (Необхідно поставити ""галочки"" у відповідних квадратах напроти імен цих елементів)." 
+
+  Control StaticText 
+  Position x1, y1+dob*5+6
+   Title "Для підтвердження свого вибору у діалозі та завершення роботи діалогу натисніть на кнопку ""Так"""
+
+  Control StaticText 
+  Position x1, y1+dob*6+6
+   Title "Для відміни роботи діалогу натисніть на кнопку ""Відмінити"""
+
+   Control OKButton 
+  Position x1 + 150, y1 + dob*8 + 6
+   Title "Так"
+end sub
+
+Sub sprav_ovs
+Dim x1, y1, dob as smallint
+x1 = 5
+y1 = 5
+dob = 11
+ Dialog  
+  Title "Допомога"
+  Control StaticText 
+  Position x1, y1
+   Title "Оберіть структурний підрозділ УМВС за ім'ям установи, адресою чи телефоном."
+
+  Control StaticText 
+  Position x1, y1+dob
+   Title "Для цього натисніть лівою клавішею миши на необхідну стрічку у будь-якій колонці."
+
+  Control StaticText 
+  Position x1, y1+dob*2+6
+   Title "Для підтвердження свого вибору у діалозі та початку пошуку натисніть на кнопку ""Так"""
+
+  Control StaticText 
+  Position x1, y1+dob*3+6
+   Title "Для відміни роботи діалогу натисніть на кнопку ""Відмінити"""
+
+
+   Control OKButton 
+  Position x1 + 130, y1 + dob*5 + 6
+   Title "Так"
+end sub
+
+Sub sprav_ovst
+Dim x1, y1, dob as smallint
+x1 = 5
+y1 = 5
+dob = 11
+ Dialog  
+  Title "Допомога"
+  Control StaticText 
+  Position x1, y1
+   Title "Оберіть структурний підрозділ УМВС на залізниці за назвою установи, адресою чи телефоном."
+
+  Control StaticText 
+  Position x1, y1+dob
+   Title "Для цього натисніть лівою клавішею миши на необхідну стрічку у будь-якій колонці."
+
+  Control StaticText 
+  Position x1, y1+dob*2+6
+   Title "Для підтвердження свого вибору у діалозі та початку пошуку натисніть на кнопку ""Так""."
+
+  Control StaticText 
+  Position x1, y1+dob*3+6
+   Title "Для відміни роботи діалогу натисніть на кнопку ""Відмінити""."
+
+
+   Control OKButton 
+  Position x1 + 140, y1 + dob*5 + 6
+   Title "Так"
+end sub
+
+
+Sub sprav_sirena
+Dim x1, y1, dob as smallint
+x1 = 5
+y1 = 5
+dob = 11
+ Dialog  
+  Title "Допомога"
+  Control StaticText 
+  Position x1, y1
+   Title "Оберіть заслон за планом ""Сирена"" за районом та розміщенням."
+
+  Control StaticText 
+  Position x1, y1+dob
+   Title "Для цього натисніть лівою клавішею миши на необхідну стрічку у будь-якій колонці."
+
+  Control StaticText 
+  Position x1, y1+dob*2+6
+   Title "Для підтвердження свого вибору у діалозі та початку пошуку натисніть на кнопку ""Так"""
+
+  Control StaticText 
+  Position x1, y1+dob*3+6
+   Title "Для відміни роботи діалогу натисніть на кнопку ""Відмінити"""
+
+
+   Control OKButton 
+  Position x1 + 130, y1 + dob*5 + 6
+   Title "Так"
+end sub
+
+
+Sub sprav_perechvat
+Dim x1, y1, dob as smallint
+x1 = 5
+y1 = 5
+dob = 11
+ Dialog  
+  Title "Допомога"
+  Control StaticText 
+  Position x1, y1
+   Title "Оберіть пост за планом ""Перехоплення"" за його номером чи розміщенням."
+
+  Control StaticText 
+  Position x1, y1+dob
+   Title "Для цього натисніть лівою клавішею миши на необхідну стрічку у будь-якій колонці."
+
+  Control StaticText 
+  Position x1, y1+dob*2+6
+   Title "Для підтвердження свого вибору у діалозі та початку пошуку натисніть на кнопку ""Так"""
+
+  Control StaticText 
+  Position x1, y1+dob*3+6
+   Title "Для відміни роботи діалогу натисніть на кнопку ""Відмінити"""
+
+
+   Control OKButton 
+  Position x1 + 130, y1 + dob*5 + 6
+   Title "Так"
+end sub
+
+
+Sub sprav_pv
+Dim x1, y1, dob as smallint
+x1 = 5
+y1 = 5
+dob = 11
+ Dialog  
+  Title "Допомога"
+  Control StaticText 
+  Position x1, y1
+   Title "Оберіть підрозділ прикордонних військ за назвою установи або її адресою."
+
+  Control StaticText 
+  Position x1, y1+dob
+   Title "Для цього натисніть лівою клавішею миши на необхідну стрічку у будь-якій колонці."
+
+  Control StaticText 
+  Position x1, y1+dob*2+6
+   Title "Для підтвердження свого вибору у діалозі та початку пошуку натисніть на кнопку ""Так""."
+
+  Control StaticText 
+  Position x1, y1+dob*3+6
+   Title "Для відміни роботи діалогу натисніть на кнопку ""Відмінити""."
+
+
+   Control OKButton 
+  Position x1 + 130, y1 + dob*5 + 6
+   Title "Так"
+end sub
+
+
+Sub sprav_pvpp
+Dim x1, y1, dob as smallint
+x1 = 5
+y1 = 5
+dob = 11
+ Dialog  
+  Title "Допомога"
+  Control StaticText 
+  Position x1, y1
+   Title "Оберіть прикордонний пункт пропуску за назвою, використовуючи інші колонки для довідки."
+
+  Control StaticText 
+  Position x1, y1+dob
+   Title "Для цього натисніть лівою клавішею миши на необхідну стрічку у будь-якій колонці."
+
+  Control StaticText 
+  Position x1, y1+dob*2+6
+   Title "Для підтвердження свого вибору у діалозі та початку пошуку натисніть на кнопку ""Так""."
+
+  Control StaticText 
+  Position x1, y1+dob*3+6
+   Title "Для відміни роботи діалогу натисніть на кнопку ""Відмінити""."
+
+
+   Control OKButton 
+  Position x1 + 140, y1 + dob*5 + 6
+   Title "Так"
+end sub
+
+
+
+Sub Help_authors
+Dim f as smallint
+f = 10
+ Dialog
+  Control StaticText
+   Position 10,2
+   Title  ""
+  Control StaticText
+   Position 20,2+f
+   Title "Географічна інформаційно-аналітична система"
+  Control StaticText
+   Position 10,2+f*2
+   Title  ""
+  Control StaticText
+   Position 22,2+f*3
+   Title "                MAPSHELL                 "
+  Control StaticText
+   Position 43,2+f*4
+   Title ""
+  Control StaticText
+   Position 40,2+f*5
+   Title "      "
+  Control StaticText
+   Position 57,2+f*6
+   Title "ОДЕСЬКА ОБЛАСТЬ"
+  Control StaticText
+   Position 10,2+f*7
+   Title  ""
+  Control StaticText
+   Position 137,2+9*8
+   Title "версія 1.0"
+  Control StaticText
+   Position 26,1+f*9
+   Title "___________________________________"
+  Control StaticText
+   Position 2,1+f*10
+   Title ""
+  Control StaticText
+   Position 24,1+f*11
+   Title "Автори: Польовий А.М., Плотницький С.В.,"
+  Control StaticText
+   Position 50,2+f*12
+   Title " Васильєв І.А., Польовий М.А."
+  Control StaticText
+   Position 2,2+f*13
+   Title ""
+  Control StaticText
+   Position 26,2+f*14   
+   Title " "
+  Control StaticText
+   Position 28,2+f*15   
+   Title ""
+  Control StaticText
+   Position 63,2+f*16   
+   Title ""
+  Control StaticText
+   Position 2,2+f*17
+   Title ""
+ Control StaticText
+   Position 73,2+f*18   
+   Title "(c) автори, 1998-2001"
+Control OKButton
+Position 77,200 '105
+ Title "Так"
+End Sub
+
+
+Sub Help_authors_adm
+Dim f as smallint
+f = 10
+ Dialog
+  Control StaticText
+   Position 10,2
+   Title  ""
+  Control StaticText
+   Position 26,2+f
+   Title "Оболнка географічної інформаційно-аналітичної системи,"
+  Control StaticText
+   Position 10,2+f*2
+   Title  "                    яка самонастроюється"
+  Control StaticText
+   Position 20,2+f*3
+   Title "             для роботи з мапами обласного рівня"
+  Control StaticText
+   Position 107,2+f*4
+   Title " MAPSHELL Admin версія 1.0"
+  Control StaticText
+   Position 26,1+f*5
+   Title "___________________________________"
+  Control StaticText
+   Position 2,1+f*6
+   Title ""
+  Control StaticText
+   Position 38,1+f*7
+   Title "(c) A.N.P. 1998 - 2000"
+
+Control OKButton
+Position 77,1+f*8
+ Title "Так"
+End Sub

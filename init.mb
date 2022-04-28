@@ -1,0 +1,348 @@
+Include "mapbasic.def"
+Include "menu.def"
+Include "icons.def"
+
+Include "globals1.def"
+
+Declare Sub Begin1
+Declare Sub put_maps
+Declare sub put_maps_first
+
+Declare Sub scale_plus
+Declare Sub scale_minus
+
+Declare Sub legenda
+Declare Sub show_hide_legend
+ declare sub delete_first_layers
+
+
+Sub Begin1
+'проверка на наличие открытых файлов в мапинфо
+'если они есть закрываю без сохранения
+'в MapInfo4 было возможно загрузить файлы с такими же именами в окно (2) в 45-й выдается 
+'сообщение об ошибке, поэтому теперь два варианта: 1)(да)закрытие файлов, 2)отмена запуска программы.
+'в Mapinfo5, вроде бы, по-простому запускается новая копия Mapinfo, поэтому, 
+'возможно, стоит убрать эту проверку вообще
+dim otvet as logical
+If NumWindows() > 0 then 
+otvet = Ask("У системі Мапінфо відкриті інші файли, для нормальної роботи АРМу необхідно закрити їх. Чи закрити файли без збереження останніх змін?", "Так", "Не треба")
+ if otvet then 
+  Close All
+ else 
+  Set Handler EndHandler Off
+  Note "Автоматизоване робоче місце не було загружене внаслідок побажання користувача здійснити збереження відкритих файлів"
+  End Program
+ end if
+end if
+  'Set Paper Units "cm"
+end Sub
+
+
+'-------------- процедура начальной загрузки слоев (аналог workspace`a) -------------
+'---- эту процедуру разбил на две части: открытие таблиц --> initial (находится в shell1 и admin1)
+'---- и рисование базовой карты --> put_maps_first и put_maps (в файле init)
+
+'--- процедура рисования базовой карты (усовершенствованная вторая часть бывшего workspace`a)
+Sub put_maps_first
+Map From 
+  obl2_table, obl1_table,  
+  polit_cordon_table, inshi_table,
+  most_table,
+  zal_sets_table, zal_dor_table,
+  good_avtoshl_table,avtoshl_table,earth_r_table,
+  gidr_table,  selection_table,    
+  np_table, rastit_table, reljef_table,       rajon_table,
+  r_selection_table,    leg1_table
+  
+  Min
+  'Position (0.0520833,0.0520833) Units "in"
+  'Width 5.52083 Units "in" Height 3.375 Units "in" 
+end sub
+
+
+
+Sub put_maps
+Set Map Redraw Off
+Set Window FrontWindow() ScrollBars Off Autoscroll On
+
+Set distance units "km"
+Set paper units "cm"
+
+Set Map
+  CoordSys Earth Projection 1, 0
+  Center (29.08885901,46.73713476)
+  Zoom 619.5397531 Units "km"
+  
+  'это установки к  старому варианту начальной картинки
+  'CoordSys Earth Projection 1, 0
+  'Center (30.37395152,46.7301245)
+  'Zoom 571.5 Units "km"
+
+  Preserve Zoom Display Scale
+  XY Units "degree" Distance Units "km" Area Units "sq km"
+Set Map
+  Layer obl2_table
+    Display Graphic
+    Label Line None Position Center Font ("Arial Cyr",0,9,0) Pen (1,2,0) 
+      With Елемент_карти
+      Parallel On Auto Off Overlap Off Duplicates On Offset 2
+      Visibility On
+  Layer obl1_table
+    Display Graphic
+    Label Line Arrow Position Right Font ("Arial Cyr",0,9,0) Pen (1,2,0) 
+      With Елемент_карти
+      Parallel On Auto Off Overlap Off Duplicates On Offset 2
+      Visibility On
+
+  Layer polit_cordon_table
+    Display Graphic
+    Selectable On
+    Label Line None  Position Above Right Font simple_font  Pen (1,2,0) 
+      With polit_cordon_label
+      Parallel On  Auto Off  Overlap Off Duplicates On Offset 2 'Auto Off
+
+  Layer inshi_table
+    Zoom (0,200) Units "km" On
+    Display Off 
+    Selectable On
+    Label Line None  Position Above Right Font simple_font  Pen (1,2,0) 
+      With inshi_label
+      Parallel On  Auto Off  Overlap Off Duplicates On Offset 2 'Auto Off
+      
+  Layer most_table
+    Zoom (0,200) Units "km" On
+    Display Graphic
+    Selectable On
+   Label Line None  Position Above Right Font simple_font  Pen (1,2,0) 
+      With most_label
+      Parallel On  Auto Off  Overlap Off Duplicates On Offset 2 'Auto Off
+  Layer zal_sets_table
+    Zoom (0,250) Units "km" On
+    Display Graphic
+    Selectable On
+    Label Line Arrow Position Right  Font simple_font Pen (1,2,0) 
+      With zal_sets_label
+      Parallel On Auto On Overlap Off Duplicates Off Offset 2
+      Visibility Zoom (0,200) Units "km"
+  Layer zal_dor_table
+    Zoom (0,500) Units "km" On
+    Display Graphic
+    Selectable On
+    Label Line Arrow Position Above Font simple_font  Pen (1,2,0) 
+      With zal_dor_label
+      Parallel On Auto Off Overlap Off Duplicates Off Offset 2
+      Visibility Zoom (0,100) Units "km"
+  Layer good_avtoshl_table
+    Zoom (0,400) Units "km" On
+    Display Graphic
+    Selectable On
+    Label Line Arrow Position Above Font simple_font Pen (1,2,0) 
+      With good_avtoshl_label
+      Parallel On Auto Off Overlap Off Duplicates Off Offset 2
+      Visibility On
+
+  Layer avtoshl_table
+    Zoom (0,400) Units "km" On
+    Display Graphic
+    Selectable On
+    Label Line Arrow Position Above Font simple_font Pen (1,2,0) 
+      With avtoshl_label
+      Parallel On Auto Off Overlap Off Duplicates Off Offset 2
+      Visibility On
+  Layer earth_r_table
+    Zoom (0,200) Units "km" On
+    Display Graphic
+    Selectable On
+    Label Line Arrow Position Above Font simple_font Pen (1,2,0) 
+      With earth_r_label
+      Parallel On Auto Off Overlap Off Duplicates Off Offset 2
+      Visibility On
+  Layer selection_table
+    Display Graphic
+    Selectable Off
+    Label Line None Position Above Right Font simple_font Pen (1,2,0) 
+      With selection_label
+      Parallel On Auto Off Overlap Off Duplicates On Offset 2  
+      Visibility On
+  Layer gidr_table
+    Zoom (0,150) Units "km" On
+    Display Graphic
+    Selectable On
+    Label Line None Position Center Font simple_font Pen (1,2,0) 
+      With gidr_label
+      Parallel On Auto Off Overlap Off Duplicates Off Offset 2
+       Visibility Zoom (0,150) Units "km"  
+  Layer np_table 
+    Zoom (0,150) Units "km" On
+    Display Graphic
+    Selectable On
+    Label Line Simple Offset 10 Position Above  Font simple_font  Pen (1,2,0) 
+      With np_label
+'   !!!!!!!!!! поставил duplicates on для показа одинаковіх имен соседних сел 
+      Parallel On  Auto On  Duplicates On Offset 2    'Auto Off Overlap Off
+       Visibility Zoom (0,100) Units "km" 
+  Layer reljef_table
+    Zoom (0,50) Units "km" On
+    Display Off 'Graphic
+    Selectable On
+    Label Line None Position Center Font simple_font  Pen (1,2,0) 
+      With reljef_label
+      Parallel On Auto Off Overlap Off Duplicates On Offset 2 
+       Visibility On
+  Layer rastit_table
+    Zoom (0,50) Units "km" On
+    Display Graphic
+    Selectable On
+    Label Line None Position Center Font simple_font  Pen (1,2,0) 
+      With rastit_label
+      Parallel On Auto Off Overlap Off Duplicates On Offset 2 
+       Visibility On
+  Layer rajon_table
+    Display Graphic
+    Selectable On
+    Label Line None  Position Above Right Font raj_font  Pen (1,2,0) 
+      With rajon_label
+      Parallel On  Auto On  Overlap Off Duplicates On Offset 2 'Auto Off
+      Visibility Zoom (0,400) Units "km" 'On
+  Layer R_selection_table
+    Display Graphic
+    Selectable Off
+    'Label 
+      'Line None  Position Above Right Font simple_font Pen (1,2,0) 
+      'With R_selection_label
+      'Parallel On Auto Off Overlap Off Duplicates On Offset 2
+     ' Visibility On
+
+  Layer leg1_table
+    Display Graphic  'Off
+    Selectable On     'Off
+    Label Visibility Off
+
+
+Set Map Redraw On
+Set Window Frontwindow() Max  
+Set Window Frontwindow() SysMenuClose Off
+Set Map Window Frontwindow() Preserve Scale
+main_win_id = Frontwindow()
+
+
+Set window main_win_id  Font simple_font
+Set Window win_mapinfo Font simple_font
+
+end Sub '------------- конец процедуры вывода начальной картинки -----------------
+
+
+
+'------------- две процедуры к кнопкам смены масштаба ---------------
+Sub scale_plus
+  dim current_scale, new_cur_scale as float
+   current_scale = MapperInfo(FrontWindow(),MAPPER_INFO_SCALE)
+   new_cur_scale = current_scale/2
+   if new_cur_scale < 0.2 then 
+     new_cur_scale = 0.2
+   end if 
+
+  call delete_first_layers
+  Set Map  Scale 1 Units "cm"  For new_cur_scale Units "km"
+end sub
+
+Sub scale_minus
+dim current_scale, new_cur_scale as float
+  current_scale = MapperInfo(FrontWindow(),MAPPER_INFO_SCALE)
+  new_cur_scale = current_scale*2
+  if new_cur_scale > 27 then 
+    new_cur_scale = 27
+  end if 
+
+  call delete_first_layers
+  Set Map  Scale 1 Units "cm"  For new_cur_scale Units "km"
+end sub
+
+'---------------- две процедуры подготовки и вывода/убирания легенды ----------------
+Sub legenda
+'set 
+shade   ' window main_win_id 
+ leg1_table 
+with Умовний_знак values
+  "Відділення міліції" Symbol ("Vm_r.bmp",0,36,0) ,
+  "Взвод ДПС" Symbol ("Vdps_r.bmp",0,36,0) ,
+  "Заслон за планом ""Сирена""" Symbol ("Post_siren.bmp",0,18,0) ,
+  "Лінійне відділення на залізниці" Symbol ("J_lvn_r.bmp",0,36,0) ,
+  "Лінійний відділ" Symbol ("LV_R.BMP",0,36,0) ,
+  "Лінійний відділ на залізниці" Symbol ("J_lv_r.bmp",0,36,0) ,
+  "Лінійний пункт на залізниці" Symbol ("J_lp_r.bmp",4210752,36,0) ,
+  "Міждержавний пункт пропуску" Symbol ("P_pun3_r.bmp",4210752,36,0) ,
+  "Міжнародний пункт пропуску" Symbol ("P_pun4_r.bmp",4210752,36,0) ,
+  "Місцевий пункт пропуску" Symbol ("P_pun2_r.bmp",4210752,36,0) ,
+  "Міський відділ" Symbol ("MV_R.BMP",4210752,36,0) ,
+  "Міський районний відділ" Symbol ("MRV_R.BMP",4210752,36,0) ,
+  "Одеське міське управління" Symbol ("OMU_R.BMP",8421504,36,0) ,
+  "Пост за планом ""Перехоплення""" Symbol ("post_pereh.bmp",8421504,18,0) ,
+  "Прикордонна застава" Symbol ("P_zastav_r.bmp",8421504,36,0) ,
+  "Прикордонна комендатура" Symbol ("P_komen_r.bmp",8421504,36,0) ,
+  "Прикордонний пост" Symbol ("P_post.bmp",8421504,18,0) ,
+  "Радіотехна прикордонна застава" Symbol ("P_rtzast.bmp",8421504,24,0) ,
+  "Радіотехний прикордонний пост" Symbol ("P_rtpost.bmp",12632256,24,0) ,
+  "Районний відділ" Symbol ("RV_R.BMP",12632256,36,0) ,
+  "Рота ДПС" Symbol ("Rdps_r.bmp",12632256,36,0) ,
+  "Селищне відділення" Symbol ("CV_R.BMP",12632256,36,0) ,
+  "Спрощений пункт пропуску" Symbol ("P_pun1_r.bmp",12632256,36,0) ,
+  "УДАІ УМВС в Одеській області" Symbol ("UDAI_R.BMP",12632256,36,0) ,
+  "УМВС України в Одеській області" Symbol ("UMVC_R.BMP",16777215,36,0) ,
+  "УМВС України на Одеській залізниці" Symbol ("J_umvc_r.bmp",16777215,36,0) ,
+  "Управління прикордонних військ" Symbol ("P_upv_r.bmp",16777215,36,0) 
+  default Symbol (40,0,12) '  # color 0 # 
+
+set legend  'window main_win_id
+  layer prev  'leg1_table   '1
+    display on 
+    shades off 
+    symbols on 
+    lines off 
+    count off 
+    title "Легенда умовних знаків" Font ("Arial Cyr",513,12,0)
+    subtitle "(службові знаки)" Font ("Arial Cyr",1,12,0)
+    ascending on 
+'    ranges Font ("Arial Cyr",1,8,0)
+'      auto display off ,      auto display on ,       auto display on ,      auto display on ,      auto display on ,
+'      auto display on ,       auto display on ,      auto display on ,      auto display on ,
+'      auto display on ,      auto display on ,      auto display on ,      auto display on ,
+'      auto display on ,      auto display on ,      auto display on ,      auto display on ,
+'      auto display on ,      auto display on ,      auto display on ,      auto display on ,
+'      auto display on ,      auto display on ,      auto display on ,      auto display on ,
+'      auto display on ,      auto display on ,      auto display on  
+
+ Set Table TableInfo(0,TAB_INFO_NAME)
+    UserMap Off
+    UserBrowse Off
+    UserClose Off
+    UserEdit Off
+    UserRemoveMap Off
+    UserDisplayMap Off
+
+
+end sub
+
+
+
+Sub show_hide_legend
+ if show_legend then 
+   close window LEGEND
+   show_legend = 0
+   Alter Button 10008
+    Uncheck
+  else 
+  Set window LEGEND  
+   Title "Легенда"
+   Position (13.5,6.5) Units "cm"   
+   Width 7.5 Units "cm"
+   Height 8 Units "cm"
+   SysMenuClose Off
+   Front
+
+   Open window LEGEND
+   show_legend = 1
+   Alter Button 10008
+    check
+ end if
+end sub 

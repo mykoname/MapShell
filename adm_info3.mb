@@ -1,0 +1,1676 @@
+Include "mapbasic.def"
+Include "menu.def"
+Include "icons.def"
+                ' Include "helpauth.mb"
+Include "globals1.def"
+
+Declare Sub info_dial_1
+Declare Sub info_dial_2
+Declare Sub info_dial_3
+Declare Sub info_dial_4
+Declare Sub info_dial_5
+Declare Sub info_dial_6
+Declare Sub info_dial_7
+Declare Sub info_dial_8
+Declare Sub info_dial_9
+Declare Sub info_dial_10
+Declare Sub info_dial_11
+Declare Sub info_dial_12
+
+Declare sub first_info_dial
+Declare sub writing_info_data
+
+
+
+sub info_dial_1
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+ 
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 
+
+
+
+sub info_dial_2
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+Control StaticText
+Position start_x, start_y+dobavka 
+ Title column_name(num_of_part+2)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka 
+ ID info_box(2).id_num
+ Value info_box(2).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(2).sh_yes
+
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka 
+ Width 200 Height 10
+ Value info_box(2).edit
+ Into info_box(2).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+ 
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 
+
+
+
+sub info_dial_3
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+Control StaticText
+Position start_x, start_y+dobavka 
+ Title column_name(num_of_part+2)
+Control StaticText
+Position start_x, start_y+dobavka*2
+ Title column_name(num_of_part+3)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka 
+ ID info_box(2).id_num
+ Value info_box(2).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(2).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka*2
+ ID info_box(3).id_num
+ Value info_box(3).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(3).sh_yes
+
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka 
+ Width 200 Height 10
+ Value info_box(2).edit
+ Into info_box(2).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*2 
+ Width 200 Height 10
+Value info_box(3).edit
+ Into info_box(3).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+ 
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 
+
+
+
+sub info_dial_4
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+Control StaticText
+Position start_x, start_y+dobavka 
+ Title column_name(num_of_part+2)
+Control StaticText
+Position start_x, start_y+dobavka*2
+ Title column_name(num_of_part+3)
+Control StaticText
+Position start_x, start_y+dobavka*3
+ Title column_name(num_of_part+4)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka 
+ ID info_box(2).id_num
+ Value info_box(2).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(2).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka*2
+ ID info_box(3).id_num
+ Value info_box(3).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(3).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*3
+ ID info_box(4).id_num
+ Value info_box(4).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(4).sh_yes
+
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka 
+ Width 200 Height 10
+ Value info_box(2).edit
+ Into info_box(2).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*2 
+ Width 200 Height 10
+Value info_box(3).edit
+ Into info_box(3).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*3
+ Width 200 Height 10
+ Value info_box(4).edit
+ Into  info_box(4).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 
+
+
+
+sub info_dial_5
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+Control StaticText
+Position start_x, start_y+dobavka 
+ Title column_name(num_of_part+2)
+Control StaticText
+Position start_x, start_y+dobavka*2
+ Title column_name(num_of_part+3)
+Control StaticText
+Position start_x, start_y+dobavka*3
+ Title column_name(num_of_part+4)
+Control StaticText
+Position start_x, start_y+dobavka*4
+ Title column_name(num_of_part+5)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka 
+ ID info_box(2).id_num
+ Value info_box(2).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(2).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka*2
+ ID info_box(3).id_num
+ Value info_box(3).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(3).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*3
+ ID info_box(4).id_num
+ Value info_box(4).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(4).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*4
+ ID info_box(5).id_num
+ Value info_box(5).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(5).sh_yes
+
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka 
+ Width 200 Height 10
+ Value info_box(2).edit
+ Into info_box(2).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*2 
+ Width 200 Height 10
+Value info_box(3).edit
+ Into info_box(3).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*3
+ Width 200 Height 10
+ Value info_box(4).edit
+ Into  info_box(4).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *4
+ Width 200 Height 10
+ Value info_box(5).edit
+ Into  info_box(5).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+ 
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 
+
+
+
+sub info_dial_6
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+Control StaticText
+Position start_x, start_y+dobavka 
+ Title column_name(num_of_part+2)
+Control StaticText
+Position start_x, start_y+dobavka*2
+ Title column_name(num_of_part+3)
+Control StaticText
+Position start_x, start_y+dobavka*3
+ Title column_name(num_of_part+4)
+Control StaticText
+Position start_x, start_y+dobavka*4
+ Title column_name(num_of_part+5)
+Control StaticText
+Position start_x, start_y+dobavka*5
+ Title column_name(num_of_part+6)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka 
+ ID info_box(2).id_num
+ Value info_box(2).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(2).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka*2
+ ID info_box(3).id_num
+ Value info_box(3).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(3).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*3
+ ID info_box(4).id_num
+ Value info_box(4).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(4).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*4
+ ID info_box(5).id_num
+ Value info_box(5).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(5).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*5
+ ID info_box(6).id_num
+ Value info_box(6).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(6).sh_yes
+
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka 
+ Width 200 Height 10
+ Value info_box(2).edit
+ Into info_box(2).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*2 
+ Width 200 Height 10
+Value info_box(3).edit
+ Into info_box(3).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*3
+ Width 200 Height 10
+ Value info_box(4).edit
+ Into  info_box(4).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *4
+ Width 200 Height 10
+ Value info_box(5).edit
+ Into  info_box(5).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *5
+ Width 200 Height 10
+ Value info_box(6).edit
+ Into  info_box(6).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+ 
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 
+
+
+
+sub info_dial_7
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+Control StaticText
+Position start_x, start_y+dobavka 
+ Title column_name(num_of_part+2)
+Control StaticText
+Position start_x, start_y+dobavka*2
+ Title column_name(num_of_part+3)
+Control StaticText
+Position start_x, start_y+dobavka*3
+ Title column_name(num_of_part+4)
+Control StaticText
+Position start_x, start_y+dobavka*4
+ Title column_name(num_of_part+5)
+Control StaticText
+Position start_x, start_y+dobavka*5
+ Title column_name(num_of_part+6)
+Control StaticText
+Position start_x, start_y+dobavka*6
+ Title column_name(num_of_part+7)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka 
+ ID info_box(2).id_num
+ Value info_box(2).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(2).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka*2
+ ID info_box(3).id_num
+ Value info_box(3).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(3).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*3
+ ID info_box(4).id_num
+ Value info_box(4).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(4).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*4
+ ID info_box(5).id_num
+ Value info_box(5).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(5).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*5
+ ID info_box(6).id_num
+ Value info_box(6).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(6).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*6
+ ID info_box(7).id_num
+ Value info_box(7).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(7).sh_yes
+
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka 
+ Width 200 Height 10
+ Value info_box(2).edit
+ Into info_box(2).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*2 
+ Width 200 Height 10
+Value info_box(3).edit
+ Into info_box(3).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*3
+ Width 200 Height 10
+ Value info_box(4).edit
+ Into  info_box(4).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *4
+ Width 200 Height 10
+ Value info_box(5).edit
+ Into  info_box(5).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *5
+ Width 200 Height 10
+ Value info_box(6).edit
+ Into  info_box(6).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *6
+ Width 200 Height 10
+ Value info_box(7).edit
+ Into  info_box(7).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+ 
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 
+
+
+
+sub info_dial_8
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+Control StaticText
+Position start_x, start_y+dobavka 
+ Title column_name(num_of_part+2)
+Control StaticText
+Position start_x, start_y+dobavka*2
+ Title column_name(num_of_part+3)
+Control StaticText
+Position start_x, start_y+dobavka*3
+ Title column_name(num_of_part+4)
+Control StaticText
+Position start_x, start_y+dobavka*4
+ Title column_name(num_of_part+5)
+Control StaticText
+Position start_x, start_y+dobavka*5
+ Title column_name(num_of_part+6)
+Control StaticText
+Position start_x, start_y+dobavka*6
+ Title column_name(num_of_part+7)
+Control StaticText
+Position start_x, start_y+dobavka*7
+ Title column_name(num_of_part+8)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka 
+ ID info_box(2).id_num
+ Value info_box(2).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(2).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka*2
+ ID info_box(3).id_num
+ Value info_box(3).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(3).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*3
+ ID info_box(4).id_num
+ Value info_box(4).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(4).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*4
+ ID info_box(5).id_num
+ Value info_box(5).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(5).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*5
+ ID info_box(6).id_num
+ Value info_box(6).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(6).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*6
+ ID info_box(7).id_num
+ Value info_box(7).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(7).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*7
+ ID info_box(8).id_num
+ Value info_box(8).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(8).sh_yes
+
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka 
+ Width 200 Height 10
+ Value info_box(2).edit
+ Into info_box(2).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*2 
+ Width 200 Height 10
+Value info_box(3).edit
+ Into info_box(3).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*3
+ Width 200 Height 10
+ Value info_box(4).edit
+ Into  info_box(4).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *4
+ Width 200 Height 10
+ Value info_box(5).edit
+ Into  info_box(5).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *5
+ Width 200 Height 10
+ Value info_box(6).edit
+ Into  info_box(6).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *6
+ Width 200 Height 10
+ Value info_box(7).edit
+ Into  info_box(7).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *7
+ Width 200 Height 10
+ Value info_box(8).edit
+ Into  info_box(8).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+ 
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 
+
+
+
+sub info_dial_9
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+Control StaticText
+Position start_x, start_y+dobavka 
+ Title column_name(num_of_part+2)
+Control StaticText
+Position start_x, start_y+dobavka*2
+ Title column_name(num_of_part+3)
+Control StaticText
+Position start_x, start_y+dobavka*3
+ Title column_name(num_of_part+4)
+Control StaticText
+Position start_x, start_y+dobavka*4
+ Title column_name(num_of_part+5)
+Control StaticText
+Position start_x, start_y+dobavka*5
+ Title column_name(num_of_part+6)
+Control StaticText
+Position start_x, start_y+dobavka*6
+ Title column_name(num_of_part+7)
+Control StaticText
+Position start_x, start_y+dobavka*7
+ Title column_name(num_of_part+8)
+Control StaticText
+Position start_x, start_y+dobavka*8
+ Title column_name(num_of_part+9)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka 
+ ID info_box(2).id_num
+ Value info_box(2).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(2).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka*2
+ ID info_box(3).id_num
+ Value info_box(3).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(3).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*3
+ ID info_box(4).id_num
+ Value info_box(4).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(4).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*4
+ ID info_box(5).id_num
+ Value info_box(5).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(5).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*5
+ ID info_box(6).id_num
+ Value info_box(6).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(6).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*6
+ ID info_box(7).id_num
+ Value info_box(7).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(7).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*7
+ ID info_box(8).id_num
+ Value info_box(8).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(8).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*8
+ ID info_box(9).id_num
+ Value info_box(9).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(9).sh_yes
+
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka 
+ Width 200 Height 10
+ Value info_box(2).edit
+ Into info_box(2).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*2 
+ Width 200 Height 10
+Value info_box(3).edit
+ Into info_box(3).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*3
+ Width 200 Height 10
+ Value info_box(4).edit
+ Into  info_box(4).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *4
+ Width 200 Height 10
+ Value info_box(5).edit
+ Into  info_box(5).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *5
+ Width 200 Height 10
+ Value info_box(6).edit
+ Into  info_box(6).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *6
+ Width 200 Height 10
+ Value info_box(7).edit
+ Into  info_box(7).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *7
+ Width 200 Height 10
+ Value info_box(8).edit
+ Into  info_box(8).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *8
+ Width 200 Height 10
+ Value info_box(9).edit
+ Into  info_box(9).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+ 
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 
+
+
+
+sub info_dial_10
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+Control StaticText
+Position start_x, start_y+dobavka 
+ Title column_name(num_of_part+2)
+Control StaticText
+Position start_x, start_y+dobavka*2
+ Title column_name(num_of_part+3)
+Control StaticText
+Position start_x, start_y+dobavka*3
+ Title column_name(num_of_part+4)
+Control StaticText
+Position start_x, start_y+dobavka*4
+ Title column_name(num_of_part+5)
+Control StaticText
+Position start_x, start_y+dobavka*5
+ Title column_name(num_of_part+6)
+Control StaticText
+Position start_x, start_y+dobavka*6
+ Title column_name(num_of_part+7)
+Control StaticText
+Position start_x, start_y+dobavka*7
+ Title column_name(num_of_part+8)
+Control StaticText
+Position start_x, start_y+dobavka*8
+ Title column_name(num_of_part+9)
+Control StaticText
+Position start_x, start_y+dobavka*9
+ Title column_name(num_of_part+10)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka 
+ ID info_box(2).id_num
+ Value info_box(2).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(2).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka*2
+ ID info_box(3).id_num
+ Value info_box(3).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(3).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*3
+ ID info_box(4).id_num
+ Value info_box(4).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(4).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*4
+ ID info_box(5).id_num
+ Value info_box(5).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(5).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*5
+ ID info_box(6).id_num
+ Value info_box(6).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(6).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*6
+ ID info_box(7).id_num
+ Value info_box(7).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(7).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*7
+ ID info_box(8).id_num
+ Value info_box(8).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(8).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*8
+ ID info_box(9).id_num
+ Value info_box(9).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(9).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*9
+ ID info_box(10).id_num
+ Value info_box(10).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(10).sh_yes
+ 
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka 
+ Width 200 Height 10
+ Value info_box(2).edit
+ Into info_box(2).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*2 
+ Width 200 Height 10
+Value info_box(3).edit
+ Into info_box(3).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*3
+ Width 200 Height 10
+ Value info_box(4).edit
+ Into  info_box(4).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *4
+ Width 200 Height 10
+ Value info_box(5).edit
+ Into  info_box(5).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *5
+ Width 200 Height 10
+ Value info_box(6).edit
+ Into  info_box(6).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *6
+ Width 200 Height 10
+ Value info_box(7).edit
+ Into  info_box(7).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *7
+ Width 200 Height 10
+ Value info_box(8).edit
+ Into  info_box(8).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *8
+ Width 200 Height 10
+ Value info_box(9).edit
+ Into  info_box(9).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *9
+ Width 200 Height 10
+ Value info_box(10).edit
+ Into  info_box(10).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+ 
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 
+
+
+
+sub info_dial_11
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+Control StaticText
+Position start_x, start_y+dobavka 
+ Title column_name(num_of_part+2)
+Control StaticText
+Position start_x, start_y+dobavka*2
+ Title column_name(num_of_part+3)
+Control StaticText
+Position start_x, start_y+dobavka*3
+ Title column_name(num_of_part+4)
+Control StaticText
+Position start_x, start_y+dobavka*4
+ Title column_name(num_of_part+5)
+Control StaticText
+Position start_x, start_y+dobavka*5
+ Title column_name(num_of_part+6)
+Control StaticText
+Position start_x, start_y+dobavka*6
+ Title column_name(num_of_part+7)
+Control StaticText
+Position start_x, start_y+dobavka*7
+ Title column_name(num_of_part+8)
+Control StaticText
+Position start_x, start_y+dobavka*8
+ Title column_name(num_of_part+9)
+Control StaticText
+Position start_x, start_y+dobavka*9
+ Title column_name(num_of_part+10)
+Control StaticText
+Position start_x, start_y+dobavka*10
+ Title column_name(num_of_part+11)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka 
+ ID info_box(2).id_num
+ Value info_box(2).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(2).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka*2
+ ID info_box(3).id_num
+ Value info_box(3).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(3).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*3
+ ID info_box(4).id_num
+ Value info_box(4).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(4).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*4
+ ID info_box(5).id_num
+ Value info_box(5).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(5).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*5
+ ID info_box(6).id_num
+ Value info_box(6).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(6).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*6
+ ID info_box(7).id_num
+ Value info_box(7).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(7).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*7
+ ID info_box(8).id_num
+ Value info_box(8).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(8).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*8
+ ID info_box(9).id_num
+ Value info_box(9).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(9).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*9
+ ID info_box(10).id_num
+ Value info_box(10).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(10).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*10
+ ID info_box(11).id_num
+ Value info_box(11).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(11).sh_yes
+ 
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka 
+ Width 200 Height 10
+ Value info_box(2).edit
+ Into info_box(2).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*2 
+ Width 200 Height 10
+Value info_box(3).edit
+ Into info_box(3).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*3
+ Width 200 Height 10
+ Value info_box(4).edit
+ Into  info_box(4).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *4
+ Width 200 Height 10
+ Value info_box(5).edit
+ Into  info_box(5).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *5
+ Width 200 Height 10
+ Value info_box(6).edit
+ Into  info_box(6).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *6
+ Width 200 Height 10
+ Value info_box(7).edit
+ Into  info_box(7).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *7
+ Width 200 Height 10
+ Value info_box(8).edit
+ Into  info_box(8).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *8
+ Width 200 Height 10
+ Value info_box(9).edit
+ Into  info_box(9).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *9
+ Width 200 Height 10
+ Value info_box(10).edit
+ Into  info_box(10).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *10
+ Width 200 Height 10
+ Value info_box(11).edit
+ Into  info_box(11).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+ 
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 
+
+
+
+sub info_dial_12
+dim start_x, start_y, step_x, dobavka as smallint 
+start_x = 3
+start_y = 12
+step_x = 150
+dobavka = 11
+
+Dialog 
+
+Title "Призначення назв для полей виводу в ""Інфо"""
+
+Control StaticText 
+ Position start_x+3, start_y - 11
+ Title "Назва колонки у таблиці"
+Control StaticText 
+ Position start_x + step_x - 20, start_y - 11
+ Title "Відображення"  
+Control StaticText
+ Position Start_x+ step_x+ 40, start_y - 11
+ Title "Назва для виводу у вікні ""інфо"""
+
+Control StaticText
+Position start_x, start_y 
+ Title column_name(num_of_part+1)
+Control StaticText
+Position start_x, start_y+dobavka 
+ Title column_name(num_of_part+2)
+Control StaticText
+Position start_x, start_y+dobavka*2
+ Title column_name(num_of_part+3)
+Control StaticText
+Position start_x, start_y+dobavka*3
+ Title column_name(num_of_part+4)
+Control StaticText
+Position start_x, start_y+dobavka*4
+ Title column_name(num_of_part+5)
+Control StaticText
+Position start_x, start_y+dobavka*5
+ Title column_name(num_of_part+6)
+Control StaticText
+Position start_x, start_y+dobavka*6
+ Title column_name(num_of_part+7)
+Control StaticText
+Position start_x, start_y+dobavka*7
+ Title column_name(num_of_part+8)
+Control StaticText
+Position start_x, start_y+dobavka*8
+ Title column_name(num_of_part+9)
+Control StaticText
+Position start_x, start_y+dobavka*9
+ Title column_name(num_of_part+10)
+Control StaticText
+Position start_x, start_y+dobavka*10
+ Title column_name(num_of_part+11)
+Control StaticText
+Position start_x, start_y+dobavka*11
+ Title column_name(num_of_part+12)
+
+Control CheckBox 
+ Position start_x+step_x, start_y 
+ ID info_box(1).id_num
+ Value info_box(1).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(1).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka 
+ ID info_box(2).id_num
+ Value info_box(2).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(2).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y+dobavka*2
+ ID info_box(3).id_num
+ Value info_box(3).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(3).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*3
+ ID info_box(4).id_num
+ Value info_box(4).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(4).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*4
+ ID info_box(5).id_num
+ Value info_box(5).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(5).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*5
+ ID info_box(6).id_num
+ Value info_box(6).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(6).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*6
+ ID info_box(7).id_num
+ Value info_box(7).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(7).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*7
+ ID info_box(8).id_num
+ Value info_box(8).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(8).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*8
+ ID info_box(9).id_num
+ Value info_box(9).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(9).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*9
+ ID info_box(10).id_num
+ Value info_box(10).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(10).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*10
+ ID info_box(11).id_num
+ Value info_box(11).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(11).sh_yes
+Control CheckBox 
+ Position start_x+step_x, start_y + dobavka*11
+ ID info_box(12).id_num
+ Value info_box(12).sh_yes     'info_box(1).old_sh_yes
+ Into info_box(12).sh_yes
+ 
+Control EditText
+ Position Start_x + step_x + 25, start_y
+ Width 200 Height 10
+ Value info_box(1).edit
+ Into info_box(1).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka 
+ Width 200 Height 10
+ Value info_box(2).edit
+ Into info_box(2).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*2 
+ Width 200 Height 10
+Value info_box(3).edit
+ Into info_box(3).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka*3
+ Width 200 Height 10
+ Value info_box(4).edit
+ Into  info_box(4).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *4
+ Width 200 Height 10
+ Value info_box(5).edit
+ Into  info_box(5).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *5
+ Width 200 Height 10
+ Value info_box(6).edit
+ Into  info_box(6).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *6
+ Width 200 Height 10
+ Value info_box(7).edit
+ Into  info_box(7).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *7
+ Width 200 Height 10
+ Value info_box(8).edit
+ Into  info_box(8).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *8
+ Width 200 Height 10
+ Value info_box(9).edit
+ Into  info_box(9).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *9
+ Width 200 Height 10
+ Value info_box(10).edit
+ Into  info_box(10).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *10
+ Width 200 Height 10
+ Value info_box(11).edit
+ Into  info_box(11).edit
+
+Control EditText
+ Position Start_x + step_x + 25, start_y + dobavka *11
+ Width 200 Height 10
+ Value info_box(12).edit
+ Into  info_box(12).edit
+
+Control OKButton
+ Title "Так"
+
+Control CancelButton
+ Title "Відмінити"
+ Calling first_info_dial
+ 
+
+'прокрутка всего списка если он больше 25 (это оставить на потом)
+' выяснение по имени таблицы строки в око.ини куда записывать данные и их запись туда
+' + ОТРАБОТКА ВОЗМОЖНОЙ ОШИБКИ ПРИ ОТКРЫТОМ УЖЕ ФАЙЛЕ око.ини - предварит проверка
+
+  If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub   'call first_info_dial      
+
+   End If
+
+call writing_info_data
+
+Call first_info_dial
+end sub 

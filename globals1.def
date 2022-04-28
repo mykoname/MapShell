@@ -1,0 +1,203 @@
+      'определение глобальных массивов (в .тч. районов)
+Define Rajones_and_obl_towns    40
+Define num_of_rajones           26
+Define Num_of_np                1500
+Define num_of_odessa_rajones    8
+Define Num_of_structur          300
+Define Num_of_posts             500
+Define Num_of_sirena            500
+'три следующих строки от фонар€ но с запасом
+Define Num_of_str_tr            200
+Define Num_of_cordon            300
+Define Num_of_cordon_punkt      300
+Define num_of_zalsets           300
+Define max_num_of_columns       60
+Define max_num_of_info_rows     30
+Define num_of_tables            30
+Define ini_file                 "mapshell.ini"
+
+Type info_data     'тип к выводу сокращенного инфо 
+  native_name as alias
+  sh_yes as logical
+  good_name as string
+End Type
+
+Type info_show_data
+  native_name as alias
+  good_name as string
+End Type
+
+'дл€ админа:
+Type info_id_yes
+  id_num as smallint
+  sh_yes as logical
+  edit as string
+End Type
+
+'***************** новые переменные 2000 г ********************
+Global
+  eye_stand_menu as logical,
+  prob1_tab_name, prob2_tab_name, prob_tab_name3, prob_menu_name1 as string
+
+'**************************************************************
+
+'------ переменные к выводу сокращенного info ---------
+Global
+ rajon_i(max_num_of_columns), np_i(max_num_of_columns), zal_set_i(max_num_of_columns),
+   sirena_i(max_num_of_columns), perechvat_i(max_num_of_columns), 
+   ovs_i(max_num_of_columns), ovst_i(max_num_of_columns), pv_i(max_num_of_columns),
+   pvpp_i(max_num_of_columns)                 as info_data,
+ rajon_i_num, np_i_num, zal_set_i_num, sirena_i_num, perechvat_i_num, ovs_i_num, 
+   ovst_i_num, pv_i_num, pvpp_i_num           as smallint,
+ rajon_i_sh(max_num_of_info_rows), np_i_sh(max_num_of_info_rows), 
+   zal_set_i_sh(max_num_of_info_rows), sirena_i_sh(max_num_of_info_rows), 
+   perechvat_i_sh(max_num_of_info_rows), ovs_i_sh(max_num_of_info_rows), 
+   ovst_i_sh(max_num_of_info_rows), pv_i_sh(max_num_of_info_rows), 
+   pvpp_i_sh(max_num_of_info_rows)            as info_show_data,
+
+ rajon_info_table, zal_sets_info_table, np_info_table, 
+ structur_info_table, perechvat_info_table, sirena_info_table as string,
+ struct_tr_info_table, cordon1_info_table, cordon2_info_TABLE as string,
+
+avtoshl_info_table, good_avtoshl_info_table, earth_r_info_table as string,
+zal_dor_info_table,  rastit_info_table, reljef_info_table as string,
+gidr_info_table, most_info_table, inshi_info_table as string
+
+'это тоже к инфо но дл€ админа:
+Global tabs_list, tabs_name(num_of_tables), column_name(max_num_of_columns) as string,
+  tabs_num as integer,
+  info_box(max_num_of_columns) as info_id_yes,
+'нижн€€ величина -- дл€ определени€ частей списка столбцов если их более 25
+' обнул€етс€ в админе
+ num_of_part as smallint
+Global sel_tab_num, columns_num, schet2 as smallint,
+  column_names as string
+Global 
+  rajon_columns_num, np_columns_num, zal_set_columns_num, sirena_columns_num, 
+  perechvat_columns_num, ovs_columns_num, 
+  ovst_columns_num, pv_columns_num, pvpp_columns_num           as smallint,
+  first_val as smallint
+
+
+
+
+' к парол€м
+Global
+ adm_passw, oper_passw, temp_ini_file as string
+
+
+ Global 
+  r_name(Rajones_and_obl_towns), only_rajones(num_of_rajones) As string * 36,
+  short_r_name(Rajones_and_obl_towns), obl_t_name(30) as string * 36,
+  r_id(Rajones_and_obl_towns), r_p(Rajones_and_obl_towns), last_r_select as smallint, 
+  only_rajones_id(num_of_rajones), r_select, selo_count as smallint,
+  last_obl_t, obl_t_select, last_zal_set, zal_set_select as smallint,
+  counter3, count, n, i, i2, i3, end_i, m, obl_towns_num as smallint,
+  r_names, np_names, obl_town_names as string, 
+  structur_names1, structur_names2, structur_names3 as string,
+  perechvat_names1, perechvat_names2, zal_sets_names as string,
+  struct_tr_names1, struct_tr_names2, struct_tr_names3 as string,
+  cordon1_names1, cordon1_names2, cordon2_names1, cordon2_names2,cordon2_names3 as string, 
+  sirena_rnames, sirena_names as string,
+  zal_sets_name(num_of_zalsets) as string * 36,
+  sirena_rname(num_of_sirena) as string * 20,
+  sirena_name(num_of_sirena) as string * 90,
+  structur_name1(num_of_structur), structur_name2(num_of_structur) as string * 75,
+  structur_name3(num_of_structur) as string*12,
+  perechvat_num1(num_of_posts) as smallint,
+  perechvat_name2(num_of_posts) as string * 75,
+  struct_tr_name1(num_of_str_tr), struct_tr_name2(num_of_str_tr) as string*75,
+  struct_tr_name3(num_of_str_tr) as string*12,
+  cordon1_name1(num_of_cordon), cordon1_name2(num_of_cordon) as string*30,
+  cordon2_name1(num_of_cordon_punkt) as string*45, 
+  cordon2_name2(num_of_cordon_punkt) as string*15,
+  cordon2_name3(num_of_cordon_punkt) as string*10,
+  last_perechvat_sel, last_structur_sel, perechvat_sel, structur_sel as smallint,
+  last_cordon1_sel, last_cordon2_sel, last_struct_tr_sel as smallint, 
+  cordon1_sel, cordon2_sel, struct_tr_sel as smallint,
+  last_sirena_sel, sirena_sel_num as smallint,
+  last_np_select, np_select, np_name(Num_of_np) As string * 30, 
+  last_np_select_num, np_select_num as smallint,
+  last_way_of_np_selection, way_of_np_selection As smallint,
+
+  select_r_poligon, r_obj(Rajones_and_obl_towns) As object,
+  map_dir, prog_dir, map_path As string,
+  simple_font, raj_font, font_of_selection as font,
+  umvs_font, posts_font, cordon_font, zal_dor_font, zal_umvs_font, sirena_font as font,
+  line_of_selection as pen,
+  brush_of_selection, raj_sel_brush as brush,
+    
+  obl1_table, obl2_table, leg1_table, polit_cordon_table as string,
+  rajon_table, avtostr_table, avtoshl_table, good_avtoshl_table, earth_r_table as string,
+  zal_dor_table, zal_sets_table, rastit_table, reljef_table, inshi_table as string,
+  np_table, gidr_table, most_table, selection_table, R_selection_table as string,
+  structur_table, perechvat_table, sirena_table, umvs4_table, umvs5_table as string,
+  struct_tr_table, cordon1_table, cordon2_TABLE, cordon_zona_table as string,
+  tamog_table as  string,
+  rajon_label, avtostr_label, avtoshl_label, good_avtoshl_label, earth_r_label as alias,
+  zal_dor_label, zal_sets_label, rastit_label, reljef_label, inshi_label as alias,
+  np_label, gidr_label, most_label, selection_label, r_selection_label as alias,
+  polit_cordon_label as alias,
+  structur_label, structur_label2, structur_label3, perechvat_label, perechvat_label2 as alias,
+  sirena_rlabel, sirena_label, umvs4_label, umvs5_label as alias,
+  struct_tr_label1,   struct_tr_label2,  struct_tr_label3 as alias, 
+  cordon1_label1,cordon1_label2,cordon2_label1,cordon2_label2,cordon2_label3 as alias,
+  cordon_zona_label, tamog_label as alias
+
+Global 
+    init_raj_gran, show_raj_gran As logical,
+    init_show_np, show_np As logical,
+    init_show_dor1, show_dor1 As logical,
+    init_show_dor2, show_dor2 As logical,
+    init_show_dor3, show_dor3 As logical,
+    init_show_gidr, show_gidr As logical,
+    init_show_dor4, show_dor4 As logical,
+    init_show_most, show_most As logical,
+    init_show_rastit, show_rastit As logical,
+    init_structur, show_structur, init_perechvat, show_perechvat as logical,
+    init_sirena, show_sirena As logical,
+    init_show_inshi, show_inshi, init_show_reljef, show_reljef as logical,
+    ini_show_cordon_zona, show_cordon_zona as logical,
+
+    init_umvs4, show_umvs4, init_umvs5, show_umvs5  As logical, 
+    init_sumign1, show_sumign1, init_sumign2, show_sumign2 As logical,
+    init_sumign3, show_sumign3, init_sumign4, show_sumign4 As logical,
+    init_mitn, show_mitn as logical
+
+' к районам ќдессы:
+Global odessa_r_names as string,
+  odessa_r(num_of_odessa_rajones) as string *17,
+  last_odes_r, odes_r_select as smallint
+
+Global main_win_id, old_scale_num, new_scale_num  as integer,
+  old_scale, new_scale, new_scale_last as float,
+  custom_control_indicator as logical
+
+
+'глобальные переменные к поиску населенных пунктов по районам:
+Global npr_id(num_of_np) as smallint,
+ npr1_row(num_of_np), npr2_row(num_of_np), npr3_row(num_of_np) as smallint,
+ npr4_row(num_of_np), npr5_row(num_of_np), npr6_row(num_of_np) as smallint,
+ npr7_row(num_of_np), npr8_row(num_of_np), npr9_row(num_of_np) as smallint,
+ npr10_row(num_of_np),npr11_row(num_of_np),npr12_row(num_of_np) as smallint,
+ npr13_row(num_of_np),npr14_row(num_of_np),npr15_row(num_of_np) as smallint,
+ npr16_row(num_of_np),npr17_row(num_of_np),npr18_row(num_of_np) as smallint,
+ npr19_row(num_of_np),npr20_row(num_of_np),npr21_row(num_of_np) as smallint,
+ npr22_row(num_of_np),npr23_row(num_of_np),npr24_row(num_of_np) as smallint,
+ npr25_row(num_of_np),npr26_row(num_of_np) as smallint,
+       npr_names(26) as string,
+       npr_num(26), last_npr_selNum(26), npr_selNum as smallint
+
+
+'------ оределение переменных к кнопкам
+Global show_legend as logical
+ 
+
+'Global  
+'  button_show_r, button_show_np, button_show_avtostr as logical, 
+'  button_show_dor2, button_show_dor3, button_show_gidr  as logical,
+'  button_Show_structure, button_show_perechvat, button_show_sloj3 as logical,
+'  button_show_sloj4, button_show_sloj5 as logical,
+'  button_show_smegn_sloj1, button_show_smegn_sloj2 as logical,
+'  
+'  r_button as smallint

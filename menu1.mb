@@ -1,0 +1,1496 @@
+Include "mapbasic.def"
+Include "menu.def"
+Include "icons.def"
+
+Include "globals1.def"
+
+Declare Sub first_auth
+Declare Sub EndHandler
+
+Declare Sub Main
+Declare Sub Initial
+Declare sub Put_maps_first
+Declare Sub Put_maps
+Declare sub Put_names_and_first_numbers
+Declare Sub Begin1
+Declare Sub preparing_data
+Declare Sub Buttons_out
+Declare Sub legenda
+Declare Sub Password
+ Declare Sub Goodbye
+
+ Declare Sub rajon
+
+ Declare Sub mapping_of_Layers
+
+ Declare Sub rajoni
+ Declare Sub obltown
+ Declare Sub Selo_town
+ Declare Sub r_station
+ Declare Sub Umvs
+ Declare Sub Post
+ Declare Sub Sirena
+ Declare Sub Umvs_tr
+ Declare Sub Cordon
+ Declare Sub Cordon_punkt
+
+ Declare Sub Scale
+ Declare Sub Nagruzka
+ Declare Sub buttons_panel
+ Declare Sub SOS1
+ Declare Sub SOS2
+Declare Sub WinClosedHandler
+
+  Declare Sub Help1
+  Declare Sub Help_authors
+ Declare Sub show_1_layer(show_yes as logical, table_name as string, 
+                          column_of_label as alias, show_font as font)
+'----- процедура к кнопкам ----------
+' Declare Sub show_1b_layer (show_yes, button_show_ind as logical, button_id as smallint, 
+'                   table_name as string, column_of_label as alias, show_font as font)
+ Declare Sub show_1_layer_label_off(show_yes as logical, table_name as string, 
+                            column_of_label as alias)
+
+ Declare Sub show_1_layer_without_label(show_yes as logical, table_name as string)
+
+
+ Declare Sub disable_sumigni
+Declare Sub selo_town_r
+Declare Sub parallel_nplist
+Declare Sub selo_town_all
+Declare sub parallel_listbox
+Declare sub parallel_edittext
+Declare Sub Delete_select
+Declare sub deletE_first_layers
+
+Declare Sub sinchro_odessa
+Declare Sub init_odes_rajones
+
+Declare Sub Custom_scale
+Declare Sub hide_custom 
+'-------------процедуры к кнопкам ------------
+'Declare Sub nagruzka_button
+'Declare Sub show_hide_layer(button_id as smallint, show_indicat as logical, 
+'                            layer_name as string, label_name as alias)
+
+ Declare Sub sorting_rows  'к прогр. системного администратора
+
+ Declare Sub sprav_rajon
+ Declare sub sprav_obl_t
+ Declare Sub sprav_nagruz
+Declare Sub Cancel_sub  'переход в режим ожидания
+
+
+
+ 
+  '*******************************************************************************
+ Sub Rajon          'блок поиска района
+Dim e,i, x_position, y_position, dobavka, dobavka1, minus, num_of_row As smallint
+    
+x_position = 115
+y_position = 1  '20
+dobavka = 13.3  '15
+dobavka1 = 12
+minus = 1.5
+
+Dialog
+ ' !!!!!!!! обрабатывать нажатие на esc!!!!!!!!!!!!!!
+  Title "Пошук району"
+   ' Width 150   Height 200
+
+Control RadioGroup
+   Position 1,1 Width 100 Height 6.5 '8
+   Title r_names       '????????????? как переносить на второй ряд 
+   Value last_r_select
+   Into  r_select
+
+Control GroupBox
+   Position x_position - 10, y_position+dobavka+8 Width 145 Height dobavka*10+23 '*9+25 'Width 145 Height dobavka*7+25
+   Title "Загальногеографічне навантаження"
+Control CheckBox
+   Position x_position, y_position+dobavka*2+4
+   Title "Межи районів"
+   Value init_raj_gran
+   Into show_raj_gran
+Control CheckBox
+   Position x_position, y_position+dobavka*3+4
+   Title "Населені пункти"
+   Value init_show_np
+   Into show_np
+Control CheckBox
+   Position x_position, y_position+dobavka*4+4
+   Title "Залізниці"
+   Value init_show_dor1
+   Into show_dor1
+Control CheckBox
+   Position x_position, y_position+dobavka*5+4
+   Title "Автостради і удосконалені дороги"
+   Value init_show_dor2
+   Into show_dor2
+Control CheckBox
+   Position x_position, y_position+dobavka*6+4
+   Title "Автодороги"
+   Value init_show_dor3
+   Into show_dor3
+Control CheckBox
+   Position x_position, y_position+dobavka*7+4
+   Title "Грунтові дороги"
+   Value init_show_dor4
+   Into show_dor4
+
+Control CheckBox
+   Position x_position, y_position+dobavka*8+4
+   Title "Мости"
+   Value init_show_most
+   Into show_most
+
+Control CheckBox
+   Position x_position, y_position+dobavka*9+4
+   Title "Рослинність"
+   Value init_show_rastit
+   Into show_rastit
+Control CheckBox
+   Position x_position, y_position+dobavka*10+4
+   Title "Річки та озера"
+   Value init_show_gidr
+   Into show_gidr
+Control CheckBox
+   Position x_position, y_position+dobavka*11+4
+   Title "Рельєф"
+   Value init_show_reljef
+   Into show_reljef
+Control CheckBox
+   Position x_position, y_position+dobavka*12+4
+   Title "Інше навантаження"
+   Value init_show_inshi
+   Into show_inshi
+
+Control OKButton
+ Position 125, 282 '303
+ title "Так"
+Control Button 
+ Position 169, 282 '303
+ title "Допомога" 
+ Calling sprav_rajon
+
+Control CancelButton
+ Position 225, 282  '303
+ title  "Відмінити"
+' --------------------- the end of dialog -----------------------
+' for any troubles this IF: !!!очень важно -- чтоб после отмены не производились действия
+   If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+   End If
+
+call delete_select  'удаление записей в таблице запросов
+last_r_select = r_select
+  init_raj_gran  = show_raj_gran
+  init_show_np   = show_np
+  init_show_dor1 = show_dor1
+  init_show_dor2 = show_dor2
+  init_show_dor3 = show_dor3
+  init_show_dor4 = show_dor4
+  init_show_most = show_most
+  init_show_rastit = show_rastit
+  init_show_gidr =   show_gidr
+  init_show_reljef = show_reljef
+  init_show_inshi = show_inshi
+
+'удаляю перменные спец. слоев
+'  init_structur   = show_structur
+'  init_perechvat  = show_perechvat
+'  init_sirena     = show_sirena
+'  init_sumign1 = show_sumign1
+'  init_sumign2 = show_sumign2
+'  init_sumign3 = show_sumign3
+'  init_sumign4 = show_sumign4
+'  init_mitn    = show_mitn
+
+'Note str$(r_select)
+' !!!!!!!!!!!!!!!!!!!!!!!!!!!см.sields.mb около 260 строки !!!!!!!!!!!!!!!!!
+'отладочные строки:
+'Dim message1 as string  
+'message1 = "Last choice of rajon is:" + Str$(last_r_select)+ "r_select:" + str$(r_select)
+'  Dialog 
+'   Title "Temporary text from Ok"
+'   Control StaticText  Title message1
+'-------------- findng (searching) rajon ------------------------
+'Find Using rajon_table(rajon_label)
+
+Dim sel_name as string
+e = 0
+sel_name = only_rajones(r_select)
+Do
+e = e + 1
+ if r_p(e) = 0 then
+   if short_r_name(e) = sel_name then
+     num_of_row = e
+     exit do
+   end if
+ end if
+Loop While e <> end_i
+' Dialog 
+'  Title "Temporary text from Ok"
+'  Control StaticText  Title short_r_name(1)+"ttt"
+'  Control StaticText  Title sel_name+"ttt"
+'Note str$(num_of_row)+"   "+str$(end_i)
+'Find r_name(num_of_row)   'старый вариант поиска по имен района r_name(r_select)
+' возможно, стоит проверить на удачность поиска как предлагают на стр.150 Guide - разобраться
+Dim r_X_coord, r_Y_coord, r_x_min, r_x_max, r_y_min, r_y_max as float,
+    rasmer_x, rasmer_y, zoom_dist As float
+'r_X_coord = CommandInfo(cmd_info_X)
+'r_Y_coord = CommandInfo(cmd_info_Y)
+'!!!!!!!!!!!!!! тоже возможны проблемы:
+' 2000:
+'Fetch Rec num_of_row From rajon_table    'r_select From rajon_table 
+
+select_r_poligon = r_obj(num_of_row)  'Райони.obj
+
+' можно вообще убрать select_r_poligon и поставить вместо него r_obj(num_of_row)
+
+r_x_coord = CentroidX(MBR(r_obj(num_of_row)))
+r_y_coord = CentroidY(MBR(select_r_poligon))
+r_x_min = ObjectGeography(select_r_poligon,OBJ_GEO_MINX)
+r_x_max = ObjectGeography(select_r_poligon,OBJ_GEO_MAXX)
+r_y_min = ObjectGeography(select_r_poligon,OBJ_GEO_MINY)
+r_y_max = ObjectGeography(select_r_poligon,OBJ_GEO_MAXY)
+rasmer_y = Distance (R_X_min, R_Y_min,  R_X_min, r_Y_max, "km")
+rasmer_x = Distance (r_X_min, R_Y_min, R_X_max, r_Y_min, "km")
+'сравнивал ниже для выяснения наибольшего размера по y или по x и последующего 
+'выбора размера для размера изображения, но
+'оказалось, что размер по y всегда дает наибольшее возможное увеличение 
+
+'в силу горизонтальной растяжки экрана 
+'можна було зробити порівняння за допомогою функії Maximum:
+
+'
+'If rasmer_y > rasmer_x then
+' zoom_dist = rasmer_y
+'Else zoom_dist = rasmer_x
+'End if
+'условие для Котовского района:
+' if r_id(num_of_row) = 4 then  
+'   r_x_coord = 
+'   r_y_coord = 
+' end if
+'Print "X:  "+str$(r_x_coord)
+'Print "Y:  "+str$(r_y_coord)
+
+'------------------- раскраска найденного района -------------------------
+Alter Object select_r_poligon 
+  Info OBJ_INFO_BRUSH, raj_sel_brush
+Insert Into R_selection_table (obj)
+  Values (select_r_poligon)
+
+'------------ mapping of the rajon ----------------------
+
+
+Set Map Redraw Off   'Set Event processing Off 
+
+Set Window Info
+ Table rajon_table Rec num_of_row
+' Table Запрос Rec num_of_row
+'!!при уменьшенном инфо нужна эта строка!! Table rajon_info_table Rec num_of_row
+ Position (0,0.8) Units "in"
+ Width 7 Units "cm" Height rajon_i_num*0.7 Units "cm"
+ Front
+ Default Access
+'в дальнейшем при игре с видимостью отдельных слоев при зуммировании см. стр.472-473,475 
+Set Map 
+ Center (r_X_coord, r_Y_coord)
+ Zoom rasmer_y*1.609 Units "km"
+'были проблемы с зуммированием, поскольку objectGeografy возвращает значение в degrees 
+'(оч. крупных величинах - возможно - широты и высоты), distance - получая данные в degrees
+'возвращает какие-то величины, которые zoom умудряется без назначения вида units 
+'увеличивать в 1.609 и выдавать соотв. точные километры) !!!!!!!!! РАЗОБРАТЬСЯ !!!!!!!!
+
+'-------------------- mapping of layers to rajon ---------------------
+' нагрузка выведена в отд подпрограмму:
+
+  call mapping_of_layers
+
+'подцветка выбранного района
+ Set Map 
+  Layer r_selection_table Display Graphic
+Set Map Redraw On   'Set Event Processing On
+'yes_vibir_sosedey = True
+
+
+'If yes_vibir_sosedey = True Then
+  Alter Menu Item Rajoni Enable
+' Else 
+'  Alter Menu Item Rajoni Disable
+'End If 
+
+ End Sub     'of Rajon
+
+'******* ниже идут три процедуры вывода отдельных слоев по результатам диалогов *******
+'        поиска района и навантаження         входная информация для них:
+'        1)переменная-индикатор установки или невыбора флажка в диалоге,
+'        2)имя таблицы-слоя,  3)имя столбца, содержащего подписи к слою
+'        4)вид шрифта для подписей --- это возможно стоит убрать /убрано в 3-й процедуре/)
+ Sub show_1_layer (show_yes as logical, table_name as string, column_of_label as alias, 
+                   show_font as font)
+   If show_yes = 1 then
+     Set Map 
+      Layer table_name Display Graphic
+'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+      Label    Visibility On  
+           With column_of_label   Font show_font     Auto On 
+   Else
+     Set Map 
+      Layer table_name Display Off
+      Label Visibility Off
+  End If
+ End Sub
+
+'----- процедура вывода слоев параллельно с кнопкой -----
+' Sub show_1b_layer (show_yes, button_show_ind as logical, button_id as smallint, 
+'                   table_name as string, column_of_label as alias, show_font as font)
+'   If show_yes = 1 then
+'     Set Map 
+'      Layer table_name Display Graphic
+'      Label Visibility On  With column_of_label  Auto On  Font show_font
+'     button_show_ind = 1
+'     Alter Button ID button_id  Check
+'   Else
+'     Set Map 
+'      Layer table_name Display Off
+'      Label Visibility Off
+'     button_show_ind = 0
+'     Alter Button ID button_id  UnCheck
+'  End If
+' End Sub
+
+ Sub show_1_layer_label_off(show_yes as logical, table_name as string, 
+                            column_of_label as alias)
+   If show_yes = 1 then
+
+     Set Map 
+      Layer table_name Display Graphic
+      Label Visibility Off
+   Else
+     Set Map 
+      Layer table_name Display Off
+      Label Visibility Off
+   End If
+ End Sub
+
+ sub show_1_layer_without_label(show_yes as logical, table_name as string)
+   If show_yes = 1 then
+     Set Map 
+      Layer table_name Display Graphic
+   Else
+     Set Map 
+      Layer table_name Display Off
+   End If
+ end sub
+
+'**********************************************************************************
+'процедура рисования слоев нагрузки по итогам выбора в окнах диалога поиска района, 
+'                      областного города и нагрузки
+sub mapping_of_layers
+
+'call show_1b_layer(show_raj_gran,button_show_r,r_button,rajon_table, rajon_label, raj_font) 
+call show_1_layer(show_raj_gran,rajon_table, rajon_label, raj_font) 
+call show_1_layer(show_np, np_table, np_label, simple_font)
+'call show_1_layer(show_np, selo_table, selo_label, simple_font)
+call show_1_layer_label_off(show_dor1, zal_dor_table, zal_dor_label)
+call show_1_layer(show_dor1, zal_sets_table, zal_sets_label,simple_font)
+
+call show_1_layer_without_label(show_most, most_table)
+call show_1_layer_without_label(show_dor2, good_avtoshl_table) ', good_avtoshl_label, simple_font)
+call show_1_layer_without_label(show_dor3, avtoshl_table)      ', avtoshl_label, simple_font)
+call show_1_layer_without_label(show_dor4, earth_r_table)      ', earth_r_label, simple_font)
+call show_1_layer_label_off(show_gidr, gidr_table, gidr_label)
+call show_1_layer_without_label(show_rastit, rastit_table)
+
+call show_1_layer_without_label(show_reljef, reljef_table)
+call show_1_layer_label_off(show_inshi, inshi_table, inshi_label)
+' убрал рисование спец слоев
+end sub    '----------------- конец процедуры вывода нагрузки -----------------------
+
+
+'****************** поиск и показ смежных районов **************************
+ Sub Rajoni
+Dim counter, number_of_selection, counter2 as smallint,
+    scan_rajon, selected_rajones(10), full_poligon as object,
+    y_min, y_max, x_min, x_max, full_center_x, full_center_y, rasmer_x, rasmer_y as float
+'-----------поиск смежных районов ---------------
+counter = 0
+number_of_selection = 0
+Set Map Redraw Off
+Fetch First From rajon_table  'Райони
+ Do  
+  counter = counter+1
+  scan_rajon = Райони.obj
+if (Area ( Overlap(mbr(select_r_poligon), scan_rajon),  "sq km" )) > 0 then 
+   number_of_selection = number_of_selection + 1
+   selected_rajones(number_of_selection) = scan_rajon
+    Alter Object selected_rajones(number_of_selection)
+      Info OBJ_INFO_BRUSH,raj_sel_brush
+    Insert Into r_selection_table (obj)
+      Values (selected_rajones(number_of_selection))   
+End If
+  Fetch Next From rajon_table  'Райони
+ Loop Until EOT(Райони)
+'Note "число выбранных районов" 
+'Note str$(number_of_selection)
+'Note str$(counter)
+'-----------на выходе - в selected_rajones все необходимые для вывода районы -------------
+'создание одного общего полигона и вычисление его крайних координат:
+ 
+'full_poligon = mbr( Create Object as Union   from ????selection --> вначале необх. ее провести
+counter2 = 1
+full_poligon= selected_rajones(counter2)
+do
+ counter2 = counter2 + 1
+ full_poligon = Combine (full_poligon, selected_rajones(counter2))
+Loop while counter2 <> number_of_selection
+'Note str$(counter2)
+
+y_min = ObjectGeography(full_poligon,OBJ_GEO_MINY)
+y_max = ObjectGeography(full_poligon,OBJ_GEO_MAXY)
+x_min = ObjectGeography(full_poligon,OBJ_GEO_MINX)
+x_max = ObjectGeography(full_poligon,OBJ_GEO_MAXX)
+
+rasmer_y = Distance (X_min, Y_min,  X_min, Y_max, "km")
+rasmer_x = Distance (X_min, Y_min, X_max, Y_min, "km")
+
+full_center_x = centroidX(full_poligon)
+full_center_y = centroidY(full_poligon)
+
+Set Map 
+ Center (full_center_x, full_center_y)
+ Zoom rasmer_y*1.609        Units "km"
+' !!!!при необходимости уменьшить мусор названий на экране внести условия на масштаб 
+' только в блоке поиска района - сюда ничего не добавлять
+Set Map Redraw On
+Alter Menu Item Rajoni Disable
+
+ End Sub
+
+'************************* поиск городов обл. подчинения *****************************
+ Sub Obltown
+Dim 
+ x_position, y_position, f, dobavka, num_of_row, minus as smallint,
+ sel_name as string,
+ sel_obl_t as object
+
+x_position = 115
+y_position = -110
+dobavka = 13.3'14    '15
+minus = 1.5
+
+Dialog
+  Title "Пошук міста областного підпорядкування"
+Calling init_odes_rajones
+Control RadioGroup
+   Position 1,12 Width 100 Height 10
+   Title obl_town_names       '????????????? как переносить на второй ряд 
+   Value last_obl_t
+   Into  obl_t_select
+   Calling sinchro_odessa
+   ID 1
+
+Control StaticText
+   Position 4, obl_towns_num*13+22 Height 10
+   Title "Райони міста Одеси"
+Control RadioGroup
+   Position 10, obl_towns_num*13+32 Height 9
+   Title odessa_r_names
+   Value last_odes_r
+   Into  odes_r_select
+   ID 2
+   
+'--- navantagennja !!!!!!!!!!!!! ---
+Control GroupBox
+   Position x_position - 10, y_position+dobavka*8+8 Width 145 Height dobavka*10+23 '*9+25 'Width 145 Height dobavka*7+25
+   Title "Загальногеографічне навантаження"
+Control CheckBox
+   Position x_position, y_position+dobavka*9+4
+   Title "Межи районів"
+   Value init_raj_gran
+   Into show_raj_gran
+Control CheckBox
+   Position x_position, y_position+dobavka*10+4
+   Title "Населені пункти"
+   Value init_show_np
+   Into show_np
+Control CheckBox
+   Position x_position, y_position+dobavka*11+4
+   Title "Залізниці"
+   Value init_show_dor1
+   Into show_dor1
+Control CheckBox
+   Position x_position, y_position+dobavka*12+4
+   Title "Автостради і удосконалені дороги"
+   Value init_show_dor2
+   Into show_dor2
+Control CheckBox
+   Position x_position, y_position+dobavka*13+4
+   Title "Автодороги"
+   Value init_show_dor3
+   Into show_dor3
+Control CheckBox
+   Position x_position, y_position+dobavka*14+4
+   Title "Грунтові дороги"
+   Value init_show_dor4
+   Into show_dor4
+
+Control CheckBox
+   Position x_position, y_position+dobavka*15+4
+   Title "Мости"
+   Value init_show_most
+   Into show_most
+
+Control CheckBox
+   Position x_position, y_position+dobavka*16+4
+   Title "Рослинність"
+   Value init_show_rastit
+   Into show_rastit
+Control CheckBox
+   Position x_position, y_position+dobavka*17+4
+   Title "Річки та озера"
+   Value init_show_gidr
+   Into show_gidr
+Control CheckBox
+   Position x_position, y_position+dobavka*18+4
+   Title "Рельєф"
+   Value init_show_reljef
+   Into show_reljef
+Control CheckBox
+   Position x_position, y_position+dobavka*19+4
+   Title "Інше навантаження"
+   Value init_show_inshi
+   Into show_inshi
+
+Control OKButton
+ Position 70+20, 290
+ title "Так"
+Control Button 
+ Position 114+20, 290
+ title "Допомога" 
+ Calling sprav_obl_t
+Control CancelButton
+ Position 170+20, 290
+ title  "Відмінити"
+
+' --------------------- the end of dialog -----------------------
+' for any troubles this IF: !!!очень важно -- чтоб после отмены не производились действия
+   If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+   End If
+
+call delete_select  'удаление записей в таблице запросов
+call disable_sumigni
+last_obl_t = obl_t_select
+last_odes_r = odes_r_select
+
+  init_raj_gran  = show_raj_gran
+  init_show_np   = show_np
+  init_show_dor1 = show_dor1
+  init_show_dor2 = show_dor2
+  init_show_dor3 = show_dor3
+  init_show_dor4 = show_dor4
+  init_show_most = show_most
+  init_show_rastit = show_rastit
+  init_show_gidr =   show_gidr
+  init_show_reljef = show_reljef
+  init_show_inshi =  show_inshi
+
+'определение номера строки в таблице районов и обл.городов(пока районы одессы не беру в расчет)
+' r_p - массив индикаторов того, является ли этот ряд обл городом или районом
+f = 0
+sel_name = obl_t_name(obl_t_select)
+
+Do
+f = f + 1
+ if r_name(f) = sel_name then
+   if r_p(f) > 0 then  'раньше было выяснение по id:if r_id(f) > num_of_rajones then
+    num_of_row = f
+    exit do
+   end if
+ end if
+Loop While f <> end_i
+'----------- поиск обьекта (обл.города) и его отображение с нагрузкой -------------
+Dim x_center, y_center, t_x_min, t_x_max, t_y_min, t_y_max,
+    rasmer_y, rasmer_x  as float
+   'Fetch Rec num_of_row From rajon_table    'r_select From rajon_table 
+   'select_obl_t_poligon = Райони.obj
+'select_obl_t_poligon = r_obj(num_of_row)
+x_center = CentroidX(r_obj(num_of_row))
+y_center = CentroidY(r_obj(num_of_row))
+t_x_min = ObjectGeography(r_obj(num_of_row),OBJ_GEO_MINX)
+t_x_max = ObjectGeography(r_obj(num_of_row),OBJ_GEO_MAXX)
+t_y_min = ObjectGeography(r_obj(num_of_row),OBJ_GEO_MINY)
+t_y_max = ObjectGeography(r_obj(num_of_row),OBJ_GEO_MAXY)
+rasmer_y = Distance (t_X_min, t_Y_min,  t_X_min, t_Y_max, "km")
+rasmer_x = Distance (t_X_min, t_Y_min, t_X_max, t_Y_min, "km")
+
+'отдельное условие для белгорода(в силу большой его протяженности по Х):
+if r_id(num_of_row) = 31 then
+ rasmer_y = rasmer_x*0.8
+end if
+
+sel_obl_t = r_obj(num_of_row)
+Alter Object sel_obl_t
+   Info OBJ_INFO_PEN, line_of_selection
+Insert into selection_table (obj)
+  Values (sel_obl_t)
+
+
+'------------ mapping of the obl town ----------------------
+Set Map Redraw Off
+  Close Window Info
+
+'в дальнейшем при игре с видимостью отдельных слоев при зуммировании см. стр.472-473,475 
+Set Map 
+ Center (X_center, Y_center)
+ Zoom rasmer_y*1.609 Units "km"
+'были проблемы с зуммированием, поскольку objectGeografy возвращает значение в degrees 
+'(оч. крупных величинах - возможно - широты и высоты), distance - получая данные в degrees
+'возвращает какие-то величины, которые zoom умудряется без назначения вида units 
+'увеличивать в 1.609 и выдавать соотв. точные километры) !!!!!!!!! РАЗОБРАТЬСЯ !!!!!!!!
+
+'-------------------- mapping of layers to obl town ---------------------
+' нагрузка выведена в отд подпрограмму:
+
+  call mapping_of_layers
+
+Set Map Redraw On
+
+End Sub  'конец процедуры поиска городов обл подчинения
+
+Sub sinchro_odessa  'синхронизирует в диалоге обл городов районы Одессы
+Dim control_name as string,
+    control_num as smallint
+control_num = ReadControlValue(1)
+control_name = obl_t_name(control_num)
+ if InStr(1,control_name,"Одеса") <> 0 then
+  Alter Control 2
+    Enable  Active
+ else 
+  Alter Control 2
+    Disable
+ end if
+end sub
+
+Sub init_odes_rajones     'к диалогу по областным городам
+' if last_obl_t = 4 then 
+  if InStr(1,obl_t_name(last_obl_t),"Одеса") <> 0 then
+   Alter Control 2
+    Enable   Active
+ Else 
+   Alter Control 2
+    Disable
+ end if
+end sub
+
+'****************** блок поиска населенного пункта *********************
+ Sub Selo_town
+dialog
+ Title "Пошук населенного пункту"
+' Width 160 Height 80
+Control StaticText
+   Title "Яким чином будете вести пошук:"
+Control RadioGroup
+ Title "По районах; Загалом по області"
+ Value last_way_of_np_selection
+ Into way_of_np_selection
+Control OKButton
+ Position 15, 50
+ title "Так"
+Control CancelButton
+ title  "Відмінити"
+
+ If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+ End If
+
+If way_of_np_selection = 1 
+  then call selo_town_r
+  else call selo_town_all
+End If
+last_way_of_np_selection = way_of_np_selection
+ End Sub
+
+'------- поиск населенных пунктов по районам ---------
+Sub selo_town_r
+' Note "Затычка поиска насел. пункта по районам"
+Dim npsel_row_num as smallint,
+ np_sel_obj as object, 
+ x_centr, y_centr as float,
+ selected_name as string
+
+Dialog
+ Title "Пошук населеного пункту по районах"
+ Control RadioGroup
+  Position 2,3 Width 100 Height 8
+
+  Title r_names
+  Value last_r_select
+  Into  r_select
+  Calling parallel_nplist
+  Id 1
+ Control ListBox
+ Position 110,3 Height 260 Width 120
+  Title npr_names(only_rajones_id(last_r_select))
+  Value last_npr_selnum(only_rajones_id(last_r_select))
+  Into  npr_selnum
+  Id 2
+
+ Control OKButton
+ Position 125,280
+  title "Так"
+ Control CancelButton
+ Position 169,280
+  title  "Відмінити"
+If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+End If
+call delete_select
+call disable_sumigni
+init_show_np = 1
+last_r_select = r_select
+'Note r_select
+last_npr_selnum(only_rajones_id(r_select)) = npr_selnum
+'stop
+ Do Case only_rajones_id(r_select)
+  Case 1
+   npsel_row_Num = npr1_row(npr_selNum)
+  Case 2
+   npsel_row_Num = npr2_row(npr_selNum)
+  Case 3
+   npsel_row_Num = npr3_row(npr_selNum)
+  Case 4
+   npsel_row_Num = npr4_row(npr_selNum)
+  Case 5
+   npsel_row_Num = npr5_row(npr_selNum)
+  Case 6
+   npsel_row_Num = npr6_row(npr_selNum)
+  Case 7
+   npsel_row_Num = npr7_row(npr_selNum)
+  Case 8
+   npsel_row_Num = npr8_row(npr_selNum)
+  Case 9
+   npsel_row_Num = npr9_row(npr_selNum)
+  Case 10
+   npsel_row_Num = npr10_row(npr_selNum)
+  Case 11
+   npsel_row_Num = npr11_row(npr_selNum)
+  Case 12
+   npsel_row_Num = npr12_row(npr_selNum)
+  Case 13
+   npsel_row_Num = npr13_row(npr_selNum)
+  Case 14
+   npsel_row_Num = npr14_row(npr_selNum)
+  Case 15
+   npsel_row_Num = npr15_row(npr_selNum)
+  Case 16
+   npsel_row_Num = npr16_row(npr_selNum)
+  Case 17
+   npsel_row_Num = npr17_row(npr_selNum)
+  Case 18
+   npsel_row_Num = npr18_row(npr_selNum)
+  Case 19
+   npsel_row_Num = npr19_row(npr_selNum)
+  Case 20
+   npsel_row_Num = npr20_row(npr_selNum)
+  Case 21
+   npsel_row_Num = npr21_row(npr_selNum)
+  Case 22
+   npsel_row_Num = npr22_row(npr_selNum)
+  Case 23
+   npsel_row_Num = npr23_row(npr_selNum)
+  Case 24
+   npsel_row_Num = npr24_row(npr_selNum)
+  Case 25
+   npsel_row_Num = npr25_row(npr_selNum)
+  Case 26
+   npsel_row_Num = npr26_row(npr_selNum)
+ End Case
+
+  Fetch Rec npsel_row_Num from np_table 'Населені_пункти
+  np_sel_obj = Населені_пункти.obj
+  
+
+x_centr = CentroidX(np_sel_obj)
+y_centr = CentroidY(np_sel_obj)
+'np_old_brush = ObjectInfo(np_sel_obj,OBJ_INFO_BRUSH) 
+'np_selected_brush = brush_of_selection
+
+'select_ris = np_obj
+selected_name = np_name(npsel_row_num)
+
+Alter Object np_sel_obj 'select_ris
+   Info OBJ_INFO_BRUSH, brush_of_selection
+
+                                     '@@@@@@@@@@@@
+  Insert into selection_table (obj)    ',np_label)
+    Values (np_sel_obj)                ',selected_name)
+
+Set Map
+ Center (X_centr, Y_centr)
+ Zoom 63.3 Units "km"
+   LAYER selection_table Display Graphic
+ '@@@@@@@@@@@@@@
+ '    Label Visibility on With selection_label Auto On  Overlap On 
+ '          Duplicates On Font font_of_selection
+   Layer np_table Display Graphic
+    Label Visibility On  With np_label  Auto On  'Overlap OFF  Font simple_font
+     Object npsel_row_Num
+     Font font_of_selection
+
+Set Window Info
+'!!при уменьшенном инфо нужна эта строка!! Table np_info_table Rec npsel_row_num
+ Table np_table Rec npsel_row_num
+ Position (0,0.8) Units "in"
+ Width 7 Units "cm" Height np_i_num*0.7 Units "cm"
+ Front
+ Default Access
+
+
+End Sub 'конец процедуры поиска населнных пунктов по районам
+
+Sub parallel_nplist
+Dim r_choice as smallint
+r_choice = ReadControlValue(1)
+ Alter Control 2
+  Title npr_names(only_rajones_id(r_choice))
+
+  Value last_npr_selnum(only_rajones_id(r_choice))
+  Active
+end sub
+
+'*************** поиск населенных пунктов по области в целом ***************
+Sub selo_town_all
+'строку для диалога подготовил в главной процедуре
+'!!!!!!!!!!!! mtb !!!!!!сортировка массива населенных пунктов
+
+Dim y_position, x_position as smallint, ' нужны для не сделанной еще части диалога с нагрузкой 
+ last_np_select_num1, np_select_num1 as smallint, 'нужны как глобальные при использовании PopUpMenu
+    t, t1 as string
+Dialog
+ Title "Пошук населенного пункту"
+' Width 160 
+ 
+'Calling parallel_listbox
+'ПОКА УБРАЛ ВВОД ИМЕНИ 
+' Control EditText
+'  Width 120
+'  Value last_np_select
+'  Into np_select
+'  ID 1
+
+
+' Control PopUpMenu
+'  Title np_names
+'  Value last_np_select_num1  
+'  Into np_select_num1
+'  ID 3  
+
+ Control ListBox
+  Width 120  Height 200
+  Title  np_names   'FromVariable np_name              
+  Value last_np_select_num
+  Into np_select_num
+  ID 2
+'  Calling parallel_listbox ' параллелит list_box
+'  calling parallel_edittext  ' параллелит edittext
+
+ Control OKButton
+  Position 20,212
+  title "Так"
+ Control CancelButton
+  Position 65,212
+  title  "Відмінити"
+If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+End If
+call delete_select
+call disable_sumigni
+init_show_np = 1
+last_np_select_num = np_select_num
+  'np_select = np_name(np_select_num)
+'last_np_select = np_select
+
+'определение из какого слоя выбранный насел. пункт(село, город) и считывание его полигона:
+Dim np_obj, select_ris as object,
+    np_selected_brush, np_old_brush as brush,
+    x_centr, y_centr as float,
+    select_np_name as string
+'Dim   counter as smallint
+'первые строки (весь if) поставить только когда буду учитывать и села:
+'if np_select_num <= selo_count then 
+'  Fetch Rec np_select_num from Села
+'  np_obj = Села.obj
+'else
+  Fetch Rec np_select_num from np_table  'населенні_пункти
+  np_obj = Населені_пункти.obj
+'End if
+
+'поиск района, в который входит данный насел пункт: 
+'но он не нужен здесь, т.к. задача просто вывести насел пункт с опред. масштабом.
+'counter = 0
+' Do
+'   counter = counter+1
+'   if Area(Overlap(r_obj(counter), np_obj), "sq km") > 0 then Exit Do
+'   End If
+' Loop While counter <> 26
+'Note "выбранный район:  "+r_name(counter)
+'Note str$(counter)
+
+x_centr = CentroidX(np_obj)
+y_centr = CentroidY(np_obj)
+np_old_brush = ObjectInfo(np_obj,OBJ_INFO_BRUSH) 
+np_selected_brush = brush_of_selection
+
+select_ris = np_obj
+select_np_name = np_name(np_select_num)
+'Dim Sel_pen 
+Alter Object select_ris
+   Info OBJ_INFO_BRUSH, np_selected_brush
+Insert into selection_table (obj)          ',np_label)
+  Values (select_ris)                      ',select_np_name)
+Set Map
+ Center (X_centr, Y_centr)
+ Zoom 63.3 Units "km"
+   LAYER selection_table Display Graphic
+'@@@@@@@@@@@@@
+'    Label Visibility on With selection_label Auto On  Overlap On  Font font_of_selection
+
+   Layer np_table Display Graphic
+    Label Visibility On  With np_label  Auto On  'Overlap OFF  Font simple_font
+     Object np_select_Num
+     Font font_of_selection
+
+Set Window Info
+'!!при уменьшенном инфо нужна эта строка!! Table np_info_table Rec np_select_num
+ Table np_table Rec np_select_num
+ Position (0,0.8) Units "in"
+ Width 7 Units "cm" Height np_i_num*0.7 Units "cm"
+ Front
+ Default Access
+
+'!!!!!!!!!!!!далее могут идти слои нагрузки с обращением к описанным ранее подроцедурам
+' но внач. необх разобраться с диалогом и сделать возможно в нем запрос о них  
+' а может оставить как есть
+
+End Sub   'конец процедуры поиска населенных пунктов по области в целом
+
+sub parallel_listbox
+  dim how_long as smallint,
+     t1, t2, t3 as string,
+     t4 as string * 30
+     
+ t1 = ReadControlValue(1)
+'нахожу далее перв.строку с таким же началом в списке параметров listBox 
+' в расчете, что они отсортированы (мной или уже в таблице ???)
+' выясняю ее номер и даю его в Alter Control
+t2 = LTrim$(t1)
+t3= Rtrim$(t2)
+how_long = len(t3)
+
+count = 0
+do 
+count = count + 1
+if LCase$(left$(np_name(count),how_long)) = LCase$(t3) then 
+   n = count
+   Exit Do
+End If
+loop while count <> counter3
+
+Alter Control 2
+  Value n
+t4 = t3
+Alter Control 1
+  Value t4 
+  Active
+end Sub
+
+sub parallel_edittext 'вызывается из listbox поиска насел.пунктов
+dim list_n as smallint,
+    n_name as string *30
+
+list_n = ReadControlValue(2)
+n_name = np_name(List_n)
+
+Alter Control 1
+ Value n_name
+ Active
+End Sub
+
+Sub delete_select 'очистка содержимого таблицы выбора чтоб не было нескольких выделений
+                  'вызывать при каждом входе в меню. Альтернатива: Alter Object или 
+                  'смена Brusha для всей этой таблицы
+Set Map Redraw Off
+  Delete From selection_table
+  Delete From r_selection_table
+'убрал спец. слои:
+'  Set Map Layer structur_table   Label Default
+'  Set Map Layer perechvat_table  Label Default
+'  Set Map Layer sirena_table Label Default
+'  Set Map Layer struct_tr_table  Label Default
+'  Set Map Layer cordon1_table  Label Default
+'  Set Map Layer cordon2_table  Label Default
+
+  Set Map Layer zal_sets_table Label Default
+  Set Map Layer np_table Label Default
+
+  call delete_first_layers 
+
+'заодно закрываю окно информации если оно было открыто
+ if WindowInfo(WIN_INFO,WIN_INFO_OPEN) then
+  Close Window Info
+ end if
+Set window info
+ Position (0,8.5) Units "cm"
+ Width 11 Units "cm" Height 4 Units "cm"
+' Front
+ Default Access
+
+ '  после того как поставил кнопку установки ярлыков (лейблов) необх установка след неск строк 
+  Set Map Layer good_avtoshl_table Label Default
+  Set Map Layer avtoshl_table Label Default
+  Set Map Layer earth_r_table Label Default
+  Set Map Layer zal_dor_table Label Default
+  Set Map Layer most_table Label Default
+  Set Map Layer gidr_table Label Default
+  Set Map Layer rastit_table Label Default
+  Set Map Layer reljef_table Label Default
+  Set Map Layer inshi_table Label Default
+'  Set Map Layer cordon_zona_table Label Default
+  Set Map Layer polit_cordon_table Label Default
+  Set Map Layer rajon_table Label Default
+
+
+
+Set Map Redraw On
+End Sub
+
+sub delete_first_layers
+  Set Map Layer obl2_table Display Off
+  Set Map Layer obl1_table Display Off
+end sub
+
+Sub Disable_sumigni
+ Alter Menu Item Rajoni Disable
+end Sub
+
+
+
+'---------------------------- поиск ж/д станции ----------------------------
+Sub r_station
+
+Dialog 
+ Title "Пошук залізничної станції"
+
+  Control ListBox
+   Width 115  Height 200
+   Title zal_sets_names
+   Value last_zal_set
+   Into  zal_set_select
+
+ Control OKButton
+ Position 20,210
+  Title "Так"
+ Control CancelButton
+ Position 65,210
+  Title "Відмінити"
+
+   If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+
+   End If
+call delete_select
+call disable_sumigni
+init_show_dor1 = 1
+last_zal_set = zal_set_select
+
+dim zal_set_obj as object,
+    x_centr, y_centr, rasmer_y as float
+Fetch Rec zal_set_select from zal_sets_table
+ zal_set_obj = Залізничні_станції.obj
+
+x_centr = CentroidX(zal_set_obj)
+y_centr = CentroidY(zal_set_obj)
+'возможно, необходимо будет как в перехвате масштабировать по соответсвующему району !!!
+rasmer_y = 25.1
+
+Set Map
+ Center (X_centr, Y_centr)
+ Zoom rasmer_y*1.609 Units "km"
+   Layer zal_dor_table  Display Graphic
+   Layer zal_sets_table Display Graphic
+    Label Visibility On  With zal_sets_label Overlap OFF  
+      Object zal_set_select
+         Font zal_dor_font
+
+Set Window Info
+'!!при уменьшенном инфо нужна эта строка!! Table zal_sets_info_table Rec zal_set_select
+ Table zal_sets_table Rec zal_set_select
+ Position (0,0.8) Units "in"
+ Width 7 Units "cm" Height zal_set_i_num*0.7 Units "cm"
+ Front
+ Default Access
+
+end sub
+
+'------------------------ смена масштаба -------------------------
+ Sub Scale 
+Dim  gh as integer
+
+
+gh = FrontWindow()
+ old_scale = MapperInfo(gh,MAPPER_INFO_SCALE)
+
+ old_scale_num = 1
+
+Dialog 
+ Title "Зміна мірила зображення"
+  Control StaticText
+   Position 3,3
+   Title "В одному сантиметрі монітору"
+  Control RadioGroup
+   Position 13,15
+   Title "200 м;400 м;600 м;800 м;1 км;2 км;3 км;4 км;5 км;10 км;15 км;20 км"
+   Value old_scale_num
+   Into new_scale_num
+   ID 1
+   Calling hide_custom
+ Control Button
+  Title "Ввести мірило"  '????:"Інше мірило"
+  Position 70,25         '  Position 70,30+30
+  Calling custom_scale
+  ID 2
+'  Control StaticText
+'   Position 3,110
+'   Title "В одному сантиметрі"
+'   Disable
+    
+  Control EditText
+   Position 70,25 Width 50
+   Value old_scale
+   Into new_scale
+   Disable
+   Hide
+   ID 3
+  Control StaticText
+   Position 122,25
+   Title "км"
+   Disable
+   Hide
+   ID 4
+
+ Control OKButton
+  Position 70,55+80
+  Title "Так"
+ Control CancelButton
+  Position 70,75+80
+  Title "Відмінити"
+
+   If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+   End If
+
+  if custom_control_indicator then
+    If new_scale > 27 then 
+     new_scale = 27
+    end if
+    If new_scale < 0.2 then 
+     new_scale = 0.2
+    end if
+  else 
+    do case new_scale_num
+     case 1 
+      new_scale = 0.2
+     case 2 
+      new_scale = 0.4
+     case 3 
+      new_scale = 0.6
+     case 4 
+      new_scale = 0.8
+     case 5 
+      new_scale = 1
+     case 6 
+      new_scale = 2
+     case 7 
+      new_scale = 3
+     case 8 
+      new_scale = 4
+     case 9 
+      new_scale = 5
+     case 10 
+      new_scale = 10
+     case 11 
+      new_scale = 15
+     case 12 
+      new_scale = 20
+    end case
+  end if
+
+call delete_first_layers
+
+ Set Map  Scale 1 Units "cm"  For new_scale Units "km"
+End Sub 'конец процедуры смены масштаба
+
+Sub hide_custom
+ Alter Control 2
+   Enable
+   Show
+ Alter Control 3
+   Disable
+   Hide
+ Alter Control 4
+   Disable
+   Hide
+custom_control_indicator = 0
+end sub
+
+Sub custom_scale
+ Alter Control 2
+  Disable 
+  Hide
+ Alter Control 3
+  Enable
+  Active
+  Show
+ Alter Control 4
+  Enable
+  Active
+  Show
+custom_control_indicator = 1
+end sub
+
+Sub buttons_panel
+ Alter ButtonPad "Функції"
+   Show
+End sub
+
+'************** вывод нагрузки из меню "вид" **********************
+Sub Nagruzka
+Dim x_position, y_position, dobavka, minus As smallint
+
+x_position = 16
+y_position = 12
+dobavka = 13.3  '14   '15
+minus = 1.5
+
+Dialog
+  Title "Навантаження зображення"
+   ' Width 150   Height 200
+
+Control GroupBox
+   Position x_position - 10, y_position+dobavka*8+8 Width 145 Height dobavka*10+23 '*9+25 'Width 145 Height dobavka*7+25
+   Title "Загальногеографічне навантаження"
+Control CheckBox
+   Position x_position, y_position+dobavka*9+4
+   Title "Межи районів"
+   Value init_raj_gran
+   Into show_raj_gran
+Control CheckBox
+   Position x_position, y_position+dobavka*10+4
+   Title "Населені пункти"
+   Value init_show_np
+   Into show_np
+Control CheckBox
+   Position x_position, y_position+dobavka*11+4
+   Title "Залізниці"
+   Value init_show_dor1
+   Into show_dor1
+Control CheckBox
+   Position x_position, y_position+dobavka*12+4
+   Title "Автостради і удосконалені дороги"
+   Value init_show_dor2
+   Into show_dor2
+Control CheckBox
+   Position x_position, y_position+dobavka*13+4
+   Title "Автодороги"
+   Value init_show_dor3
+   Into show_dor3
+Control CheckBox
+   Position x_position, y_position+dobavka*14+4
+   Title "Грунтові дороги"
+   Value init_show_dor4
+   Into show_dor4
+
+Control CheckBox
+   Position x_position, y_position+dobavka*15+4
+   Title "Мости"
+   Value init_show_most
+   Into show_most
+
+Control CheckBox
+   Position x_position, y_position+dobavka*16+4
+   Title "Рослинність"
+   Value init_show_rastit
+   Into show_rastit
+Control CheckBox
+   Position x_position, y_position+dobavka*17+4
+   Title "Річки та озера"
+   Value init_show_gidr
+   Into show_gidr
+Control CheckBox
+   Position x_position, y_position+dobavka*18+4
+   Title "Рельєф"
+   Value init_show_reljef
+   Into show_reljef
+Control CheckBox
+   Position x_position, y_position+dobavka*19+4
+   Title "Інше навантаження"
+   Value init_show_inshi
+   Into show_inshi
+
+Control OKButton
+ Position 25+18, 290
+ title "Так"
+Control Button 
+ Position 69+18, 290
+ title "Допомога" 
+ Calling sprav_nagruz
+Control CancelButton
+ Position 125+18, 290
+ title  "Відмінити"
+' --------------------- the end of dialog -----------------------
+' for any troubles this IF: !!!очень важно -- чтоб после отмены не производились действия
+   If Not CommandInfo(CMD_INFO_DLG_OK) Then
+      Exit Sub
+   End If
+
+  init_raj_gran  = show_raj_gran
+  init_show_np   = show_np
+  init_show_dor1 = show_dor1
+  init_show_dor2 = show_dor2
+  init_show_dor3 = show_dor3
+  init_show_dor4 = show_dor4
+  init_show_most = show_most
+  init_show_rastit = show_rastit
+  init_show_gidr =   show_gidr
+  init_show_reljef = show_reljef
+  init_show_inshi = show_inshi
+
+'-------------------- mapping of layers ---------------------
+Set Map Redraw Off
+call delete_first_layers
+ if show_sumign4 then
+  call delete_select
+ end if
+
+' нагрузка выведена в отд подпрограмму:
+  call mapping_of_layers
+
+Set Map Redraw On
+
+End Sub    '------- конец процедуры нагрузки --------
+
+'подпрограмма возвращения загрузочной картинки и всех слоев в случае их случайного закрітия
+'вызывается из стандартной процедуры к закрытию окна (WinCloseHandler)
+Sub SOS1
+' пока просто рисую снова окна как в начальной загрузке
+call put_maps   'вызов процедуры рисования карты
+ if WindowInfo(WIN_INFO,WIN_INFO_OPEN) then
+  Close Window Info
+ end if
+ Alter Menu Item Rajoni Disable
+end Sub
+
+
+Sub SOS2
+ Set Window FrontWindow()  Max
+ call put_maps
+ if WindowInfo(WIN_INFO,WIN_INFO_OPEN) then
+  Close Window Info
+ end if
+ if WindowInfo(WIN_Ruler,WIN_INFO_OPEN) then
+  Close Window RULER
+ end if
+ Alter Menu Item Rajoni Disable
+end Sub 
+
+  Sub Cancel_sub
+   Note "plug of cancellin dialog"
+  End Sub 
+
+
+'ОТЛАДОЧНАЯ ИНФОРМАЦИЯ
+'Dim message2, mes3, mes4 as string
+'message2 = str$(rasmer_y)
+'mes3 = str$(r_y_min)
+'mes4 = str$(r_y_max)
+'Dialog 
+'   Title "Temporary text from Ok"
+'   Control StaticText  Title message2
+'   Control StaticText  Title mes3
+'   Control StaticText  Title mes4
+
+'******* далеее две подпрограммы к кнопкам нагрузки **************
+'Sub nagruzka_button
+'Dim id_of_button as smallint
+' id_of_button = commandinfo(cmd_info_toolbtn)
+'Do case id_of_button
+' Case 101
+'    call show_hide_layer (id_of_button,button_show_r,rajon_table,rajon_label)
+' Case 102
+'    call show_hide_layer (id_of_button,button_show_np,np_table,np_label)
+'Case 103
+' сел уже нет -- call show_hide_layer (id_of_button,button_show_selo,selo_table,selo_label)
+'далее ставлю все остальные случаи когда появятся иконы
+'возможно, уместно будет поставить затем  Case Else  на время отладки
+'End Case
+'End Sub
+
+'Sub show_hide_layer(button_id as smallint, show_indicat as logical, layer_name as string, 
+'                    label_name as alias)
+'if show_indicat = 1 then 
+'  Set Map
+'    Layer layer_name Display Off
+'    Label Visibility Off
+'  show_indicat = 0
+'  Alter Button ID button_id  Uncheck
+'else
+'  Set Map 
+'      Layer layer_name Display Graphic
+'      Label Visibility On  With label_name Auto On  
+'  show_indicat = 1
+'  Alter Button ID button_id  Check
+'end if
+'End Sub
+
+
+Sub EndHandler 
+ End Mapinfo
+end Sub
+
+
+Sub WinClosedHandler
+dim m as integer
+m = CommandInfo(CMD_INFO_WIN)
+ IF m = main_win_id then 
+   call SOS1
+ end if
+end Sub
+
+
+
+
+Sub first_auth
+Open Window Message
+Set Window Message
+ Font simple_font
+ position (5,5)
+ Width 8.5
+ Height 5
+Title ""  
+Print "   ІНФОРМАЦІЙНО-АНАЛІТИЧНА СИСТЕМА ""ОКО"""
+Print "      Автоматизоване робоче місце (АРМ)"
+Print "Оперативного чергового по управлінню МВС України"
+Print "               в Одеській області"
+Print "                                                           Версія 1.0"
+Print " ______________________________________________"
+Print "Автори: Польовий А.М., Плотницький С.В.,"
+Print "           Васильєв І.А., Польовий М.А."
+Print ""
+Print "        Одеський гідрометеорологічний інститут"
+
+end sub

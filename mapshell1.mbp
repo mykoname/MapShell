@@ -1,0 +1,9 @@
+[Link]
+Application=d:\maps\mapinfo5\mapshell\mapshell.mbx
+Module=d:\maps\mapbasic.45\mapshell\shell1.mbo
+Module=d:\maps\mapbasic.45\mapshell\menu1.mbo
+Module=d:\maps\mapbasic.45\mapshell\init.mbo
+Module=d:\maps\mapbasic.45\mapshell\helps1.mbo
+Module=d:\maps\mapbasic.45\mapshell\info1.mbo
+Module=d:\maps\mapbasic.45\mapshell\begin2.mbo
+'Module=d:\maps\mapbasic.45\mapshell\spec1.mbo

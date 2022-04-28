@@ -1,0 +1,609 @@
+Include "mapbasic.def"
+Include "menu.def"
+Include "icons.def"
+
+Include "globals1.def"
+
+' убрал в admshell (Sub main) вызов этой процедуры и т.о. 
+' весь файл и все что нужно дл€ подготовки инфо-таблиц
+Declare Sub read_data_for_info
+Declare Sub prepare_info_tabs(num_of_lines as smallint,
+               good_info(max_num_of_info_rows) as info_show_data,
+               native_table_name,info_table_name as string)
+'Declare Sub vibir_Of_info_lines(num_of_lines as smallint)
+Declare Sub read_data2(lines_num as smallint,data_string as string, 
+   full_info(max_num_of_info_rows) as info_data,
+   small_info(max_num_of_info_rows) as info_show_data, info_table_name as string)
+
+' процедура чтени€ имен, "алиасов" и проч. из mapshell.ini
+Sub read_data_for_info
+
+'потом тоже считывать из файла (число таблиц дл€ подготовки инфо-форм):
+Dim num_of_new_info_tables as smallint
+
+Dim  schet1, num_of_str as smallint,
+ new_string(40) as string
+
+Open File prog_dir+ini_file 
+  For Input As #17
+  CharSet "WindowsCyrillic"
+schet1 = 0
+do 
+  schet1 = schet1 + 1
+  Line Input #17, new_string(schet1)
+loop until EOF(17)
+num_of_str = schet1
+
+Close File #17
+
+'вызовы процедуры чтени€ данных из строчных переменных дл€ каждой таблицы 
+call read_data2(rajon_i_num,new_string(3),rajon_i, rajon_i_sh, rajon_INFO_table)
+call read_data2(np_i_num,new_string(4),np_i, np_i_sh, np_INFO_table)
+call read_data2(zal_set_i_num,new_string(5),zal_set_i, zal_set_i_sh, zal_sets_INFO_table)
+' следующие шесть вызовов убираю:
+'call read_data2(perechvat_i_num,new_string(6),perechvat_i, perechvat_i_sh, perechvat_INFO_table)
+'call read_data2(sirena_i_num,new_string(7),sirena_i, sirena_i_sh, sirena_INFO_table)
+'call read_data2(ovs_i_num,new_string(8),ovs_i, ovs_i_sh, structur_INFO_table)
+'call read_data2(ovst_i_num,new_string(9),ovst_i, ovst_i_sh, struct_tr_INFO_table)
+'call read_data2(pv_i_num,new_string(10),pv_i, pv_i_sh, cordon1_INFO_table)
+'call read_data2(pvpp_i_num,new_string(11),pvpp_i, pvpp_i_sh, cordon2_INFO_table)
+
+
+' на вс€кий случай обнуление всех new_string
+schet1 = 0
+do 
+schet1 = schet1 + 1
+  new_string(schet1) = ""
+loop while schet1 <> num_of_str
+
+
+'просто вызов списком дл€ кажд. таблицы процедуры
+'с параметрами: количество строк инфо, массив (25) /макс.число строк в good-инфо/
+'custom-типа стар-им€ -- нов-им€, им€ временной таблицы типа rajon_info_table
+
+call prepare_info_tabs(rajon_i_num, rajon_i_sh, rajon_table,rajon_INFO_table)
+call prepare_info_tabs(np_i_num, np_i_sh, np_table,np_INFO_table)
+call prepare_info_tabs(zal_set_i_num, zal_set_i_sh, zal_sets_table, zal_sets_INFO_table)
+' следующие шесть вызовов убираю:
+'call prepare_info_tabs(perechvat_i_num, perechvat_i_sh, perechvat_table,perechvat_INFO_table)
+'call prepare_info_tabs(sirena_i_num, sirena_i_sh, sirena_table,sirena_INFO_table)
+'call prepare_info_tabs(ovs_i_num, ovs_i_sh, structur_table,structur_INFO_table)
+'call prepare_info_tabs(ovst_i_num, ovst_i_sh, struct_tr_table,struct_tr_INFO_table)
+'call prepare_info_tabs(pv_i_num, pv_i_sh, cordon1_table,cordon1_INFO_table)
+'call prepare_info_tabs(pvpp_i_num, pvpp_i_sh, cordon2_table,cordon2_INFO_table)
+
+End Sub
+
+
+Sub read_data2(lines_num as smallint,data_string as string, 
+   full_info(max_num_of_info_rows) as info_data,
+   small_info(max_num_of_info_rows) as info_show_data, info_table_name as string)
+
+dim schet6, schet7, schet7sm, all_str_len, ind2, len_of_str as smallint,
+ sobaka, sobaka3 as string,
+ str_begin, str_end as integer
+
+sobaka = "@"
+sobaka3 = "@@@"
+schet6 = 0 
+ind2 = 0
+str_begin = 1
+str_end = 0
+all_str_len = len(data_string)
+do 
+ schet6 = schet6 + 1
+ str_end = InStr(str_begin,data_string,sobaka)-1
+ len_of_str = str_end - str_begin
+ full_info(schet6).native_name = Mid$(data_string,str_begin,len_of_str+1)
+ full_info(schet6).sh_yes = Mid$(data_string,str_end+2,1)
+  str_begin = str_end + 4
+  str_end = InStr(str_begin,data_string,sobaka3)-1
+ len_of_str = str_end - str_begin
+ full_info(schet6).good_name = Mid$(data_string,str_begin,len_of_str+1)
+  ' далее перескок через трех собак
+  str_begin = str_end+4
+loop while str_begin < all_str_len-2 
+     'вообще говор€ точно будет так: while str_begin-1 <> all_str_len
+
+
+' подготовка краткого массива дл€ инфо:
+
+
+
+schet7 = 0 
+schet7sm = 0
+do 
+ schet7 = schet7 + 1
+ if full_info(schet7).sh_yes then
+   schet7sm = schet7sm + 1
+   small_info(schet7sm).native_name = full_info(schet7).native_name
+   small_info(schet7sm).good_name = full_info(schet7).good_name
+ end if
+loop while schet7 <> schet6
+
+  lines_num = schet7sm
+
+' след строки используютс€ только админом: вы€снение кол-ва столбцов в кажд.таблице,
+' данные дл€ которой записываютс€ в ини-файл
+columns_num = schet6
+Do Case info_table_name
+  Case rajon_info_table 
+    rajon_columns_num = columns_num
+  Case np_info_table
+    np_columns_num = columns_num
+  Case zal_sets_info_table
+    zal_set_columns_num = columns_num
+
+' следующие шесть вариантов убираю:
+'  Case perechvat_info_table
+'    perechvat_columns_num = columns_num
+'  Case sirena_info_table
+'    sirena_columns_num = columns_num
+'  Case structur_info_table
+'    ovs_columns_num = columns_num
+'  Case struct_tr_info_table
+'   ovst_columns_num = columns_num
+'  Case cordon1_info_table 
+'    pv_columns_num = columns_num
+'  Case cordon2_info_table 
+'    pvpp_columns_num = columns_num
+End Case
+
+
+
+
+
+end sub 
+
+
+'--------- процедура  подготовки таблиц Selection с заданными администратором в oko.ini
+'--------- пол€ми дл€ каждой запрашиваемой таблицы (а потом видимо и дл€ всех таблиц)
+Sub prepare_info_tabs(num_of_lines as smallint,
+               good_info(max_num_of_info_rows) as info_show_data,
+               native_table_name,info_table_name as string)
+
+'сокращение массивов по num_of_lines
+
+Do Case num_of_lines
+  Case 1
+   Select good_info(1).native_name + "" good_info(1).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 2
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 3
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 4
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 5
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 6
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 7
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 8
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 9
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 10
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 11
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 12
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 13
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 14
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 15
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name,
+          good_info(15).native_name + "" good_info(15).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 16
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name,
+          good_info(15).native_name + "" good_info(15).good_name,
+          good_info(16).native_name + "" good_info(16).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 17
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name,
+          good_info(15).native_name + "" good_info(15).good_name,
+          good_info(16).native_name + "" good_info(16).good_name,
+          good_info(17).native_name + "" good_info(17).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 18
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name,
+          good_info(15).native_name + "" good_info(15).good_name,
+          good_info(16).native_name + "" good_info(16).good_name,
+          good_info(17).native_name + "" good_info(17).good_name,
+          good_info(18).native_name + "" good_info(18).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 19
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name,
+          good_info(15).native_name + "" good_info(15).good_name,
+          good_info(16).native_name + "" good_info(16).good_name,
+          good_info(17).native_name + "" good_info(17).good_name,
+          good_info(18).native_name + "" good_info(18).good_name,
+          good_info(19).native_name + "" good_info(19).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 20
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name,
+          good_info(15).native_name + "" good_info(15).good_name,
+          good_info(16).native_name + "" good_info(16).good_name,
+          good_info(17).native_name + "" good_info(17).good_name,
+          good_info(18).native_name + "" good_info(18).good_name,
+          good_info(19).native_name + "" good_info(19).good_name,
+          good_info(20).native_name + "" good_info(20).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 21
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name,
+          good_info(15).native_name + "" good_info(15).good_name,
+          good_info(16).native_name + "" good_info(16).good_name,
+          good_info(17).native_name + "" good_info(17).good_name,
+          good_info(18).native_name + "" good_info(18).good_name,
+          good_info(19).native_name + "" good_info(19).good_name,
+          good_info(20).native_name + "" good_info(20).good_name,
+          good_info(21).native_name + "" good_info(21).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 22
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name,
+          good_info(15).native_name + "" good_info(15).good_name,
+          good_info(16).native_name + "" good_info(16).good_name,
+          good_info(17).native_name + "" good_info(17).good_name,
+          good_info(18).native_name + "" good_info(18).good_name,
+          good_info(19).native_name + "" good_info(19).good_name,
+          good_info(20).native_name + "" good_info(20).good_name,
+          good_info(21).native_name + "" good_info(21).good_name,
+          good_info(22).native_name + "" good_info(22).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 23
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name,
+          good_info(15).native_name + "" good_info(15).good_name,
+          good_info(16).native_name + "" good_info(16).good_name,
+          good_info(17).native_name + "" good_info(17).good_name,
+          good_info(18).native_name + "" good_info(18).good_name,
+          good_info(19).native_name + "" good_info(19).good_name,
+          good_info(20).native_name + "" good_info(20).good_name,
+          good_info(21).native_name + "" good_info(21).good_name,
+          good_info(22).native_name + "" good_info(22).good_name,
+          good_info(23).native_name + "" good_info(23).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 24
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name,
+          good_info(15).native_name + "" good_info(15).good_name,
+          good_info(16).native_name + "" good_info(16).good_name,
+          good_info(17).native_name + "" good_info(17).good_name,
+          good_info(18).native_name + "" good_info(18).good_name,
+          good_info(19).native_name + "" good_info(19).good_name,
+          good_info(20).native_name + "" good_info(20).good_name,
+          good_info(21).native_name + "" good_info(21).good_name,
+          good_info(22).native_name + "" good_info(22).good_name,
+          good_info(23).native_name + "" good_info(23).good_name,
+          good_info(24).native_name + "" good_info(24).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case 25
+   Select good_info(1).native_name + "" good_info(1).good_name,
+          good_info(2).native_name + "" good_info(2).good_name,
+          good_info(3).native_name + "" good_info(3).good_name,
+          good_info(4).native_name + "" good_info(4).good_name,
+          good_info(5).native_name + "" good_info(5).good_name,
+          good_info(6).native_name + "" good_info(6).good_name,
+          good_info(7).native_name + "" good_info(7).good_name,
+          good_info(8).native_name + "" good_info(8).good_name,
+          good_info(9).native_name + "" good_info(9).good_name,
+          good_info(10).native_name + "" good_info(10).good_name,
+          good_info(11).native_name + "" good_info(11).good_name,
+          good_info(12).native_name + "" good_info(12).good_name,
+          good_info(13).native_name + "" good_info(13).good_name,
+          good_info(14).native_name + "" good_info(14).good_name,
+          good_info(15).native_name + "" good_info(15).good_name,
+          good_info(16).native_name + "" good_info(16).good_name,
+          good_info(17).native_name + "" good_info(17).good_name,
+          good_info(18).native_name + "" good_info(18).good_name,
+          good_info(19).native_name + "" good_info(19).good_name,
+          good_info(20).native_name + "" good_info(20).good_name,
+
+          good_info(21).native_name + "" good_info(21).good_name,
+          good_info(22).native_name + "" good_info(22).good_name,
+          good_info(23).native_name + "" good_info(23).good_name,
+          good_info(24).native_name + "" good_info(24).good_name,
+          good_info(25).native_name + "" good_info(25).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+
+  Case Else  
+   Select good_info(1).native_name + "" good_info(1).good_name
+     From native_table_name
+     Into info_table_name NoSelect
+End Case
+
+ Set Table info_table_name
+    ReadOnly
+    UserMap Off
+    UserBrowse Off
+    UserClose Off
+    UserEdit Off
+    UserRemoveMap Off
+    UserDisplayMap Off
+End sub
